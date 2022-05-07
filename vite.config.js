@@ -6,10 +6,10 @@ import path from 'path'
 
 // https://vitejs.dev/config/
 export default defineConfig({
- /*  build: {
+  build: {
     lib:  {
-      entry: path.resolve(__dirname, 'src/index.js'),
-      name: 'vue-auto-form',
+      entry: path.resolve(__dirname, "src/index.js"),
+      name: "vue-auto-form",
       fileName: (format) => `${format}.js` 
     },
     rollupOptions: {
@@ -20,7 +20,7 @@ export default defineConfig({
         }
       }
     }
-  }, */
+  },
   plugins: [vue()],
   resolve: {
     alias: {

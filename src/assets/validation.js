@@ -1,6 +1,6 @@
 const rules = {
     required(val, validateValue) {
-        if (Array.isArray(val) || typeof val == 'string' || typeof val == 'object') {
+        if (Array.isArray(val) || typeof val == 'string') {
             if (val.length < 1) {
                 return {
                     type: 'required'
@@ -47,15 +47,9 @@ const rules = {
         return {}
     },
     equalto(val, validateValue) {
-        const equalToEL = document.getElementById(validateValue)
-        if (equalToEL) {
-            if (val != equalToEL.value) {
-                return {
-                    type: 'equalto',
-                    value: {
-                        label: equalToEL.getAttribute('label')
-                    }
-                }
+        if (val != validateValue) {
+            return {
+                type: 'equalto',
             }
         }
         return {}

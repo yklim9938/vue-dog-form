@@ -1,5 +1,5 @@
 <template>
-  <form ref="form" @submit.prevent="onAutoSubmit" class="_auto-form" :novalidate="novalidate">
+  <form ref="form" @submit.prevent="dogSubmit" class="_dog-form" :novalidate="novalidate">
     <slot></slot>
   </form>
 </template>
@@ -8,19 +8,20 @@
 import validation from '@/assets/validation'
 export default {
     inheritAttrs: false,
-    name: 'AutoForm',
+    name: 'DogForm',
     props: {
         novalidate: Boolean
     },
     data() {
         return {
             inputs: [],
-            autoErrors: []
+            dogErrors: [],
+            errorClass: this.$dogForm.errorClass || '_dog-error'
         }
     },
      provide() {
         return {
-            autoErrors: this.autoErrors,
+            dogErrors: this.dogErrors,
         }
     },
     methods: {
@@ -39,15 +40,14 @@ export default {
                 if (validation[rule]) {
                     error = validation[rule](value, ruleValue)
                 }
-                else if (this.$autoForm.customRules && typeof this.$autoForm.customRules[rule] == 'function') {
-                    error = this.$autoForm.customRules[rule](value, ruleValue)
+                else if (this.$dogForm.customRules && typeof this.$dogForm.customRules[rule] == 'function') {
+                    error = this.$dogForm.customRules[rule](value, ruleValue)
                 }
                
                 if (error && error.type) {
                     const errorEl = document.createElement('div')
-                    const errorClass = this.$autoForm.errorClass || 'vld-error'
-                    errorEl.classList.add(errorClass)
-                    errorEl.innerHTML = this.$autoForm.message(error)
+                    errorEl.classList.add(this.errorClass)
+                    errorEl.innerHTML = this.$dogForm.message(error)
                     input.parentElement.insertBefore(errorEl, input.nextSibling)
                 }
             }
@@ -64,15 +64,14 @@ export default {
             return eventType
         },
         getErrorEl(wrapper) {
-            const errorClass = this.$autoForm.errorClass || 'vld-error'
-            return wrapper.querySelectorAll(`.${errorClass}`)
+            return wrapper.querySelectorAll(`.${this.errorClass}`)
         },
-        onAutoSubmit(e) {
+        dogSubmit(e) {
             this.inputs.forEach(i => {
                 this.validateInput(i)
             })
 
-            this.autoErrors.forEach(v => {
+            this.dogErrors.forEach(v => {
                 v()
             })
 
@@ -87,7 +86,7 @@ export default {
         }
     },
     mounted() {
-        const inputClass = this.$autoForm.inputClass || 'vld'
+        const inputClass = this.$dogForm.inputClass || 'vld'
         this.inputs = this.$refs.form.querySelectorAll(`input.${inputClass}, select.${inputClass}, textarea.${inputClass}`)
 
         this.inputs.forEach((i) => {
@@ -105,10 +104,3 @@ export default {
     }
 };
 </script>
-
-<style>
-.vld-error {
-    color: #d44848;
-    font-size: 0.875rem;
-}
-</style>

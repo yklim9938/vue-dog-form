@@ -5,3 +5,8 @@
 body {
   margin: 0;
 }
+
+._dog-error {
+  color: #d44848;
+  font-size: .875rem;
+}

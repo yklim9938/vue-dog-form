@@ -6,8 +6,8 @@
 import validation from '@/assets/validation'
 
 export default {
-    name: 'AutoError',
-    inject: ['autoErrors'],
+    name: 'DogError',
+    inject: ['dogErrors'],
     props: {
         modelValue: [String, Number, Object, Array],
         messages: Object,
@@ -15,7 +15,7 @@ export default {
     data() {
         return {
             errorMsg: '',
-            errorClass: this.$autoForm.errorClass || 'vld-error'
+            errorClass: this.$dogForm.errorClass || '_dog-error'
         }
     },
     methods: {
@@ -31,8 +31,8 @@ export default {
                     if (validation[rule]) {
                         error = validation[rule](this.modelValue, ruleVal)
                     }
-                    else if (this.$autoForm.customRules && typeof this.$autoForm.customRules[rule] == 'function') {
-                        error = this.$autoForm.customRules[rule](this.modelValue, ruleVal)
+                    else if (this.$dogForm.customRules && typeof this.$dogForm.customRules[rule] == 'function') {
+                        error = this.$dogForm.customRules[rule](this.modelValue, ruleVal)
                     }
                     if (error && error.type) {
                         if (this.messages && this.messages[error.type]) {
@@ -40,7 +40,7 @@ export default {
                             break
                         }
                         else {
-                            this.errorMsg = this.$autoForm.message(error)
+                            this.errorMsg = this.$dogForm.message(error)
                             break
                         }
                     }
@@ -50,7 +50,7 @@ export default {
         }
     },
     mounted() {
-        this.autoErrors.push(this.validate)
+        this.dogErrors.push(this.validate)
     },
     watch: {
         modelValue() {

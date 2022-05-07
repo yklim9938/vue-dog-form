@@ -1,15 +1,15 @@
 import { createApp } from 'vue'
 import App from './App.vue'
-import AutoForm from './index.js'
+import DogForm from './index.js'
 
 const app = createApp(App)
 
-// Auto Form
+// Dog Form //
 const validationMessages = {
     required: "This field is required.",
     minlength: "Input must be at least {n} characters.",
     maxlength: "Input cannot be more than {n} characters.",
-    equalto: "Input must match with {label}.",
+    equalto: "Input does not match",
     validemail: "Please enter a valid email.",
     min: "Minimum value is {n}.",
     max: "Maximum value is {n}.",
@@ -20,11 +20,11 @@ const validationMessages = {
     spiderman: "Value must equal to 'spiderman'"
 }
 
-app.use(AutoForm)
+app.use(DogForm)
 
-app.config.globalProperties.$autoForm = {
+app.config.globalProperties.$dogForm = {
     message(error) {
-        return error.value ? validationMessages[error.type].replace(/{n}/g, error.value.n) : validationMessages[error.type]
+        return error.value?.n ? validationMessages[error.type].replace(/{n}/g, error.value.n) : validationMessages[error.type] || error.type
     },
     customRules: {
         spiderman(val) {
@@ -38,6 +38,6 @@ app.config.globalProperties.$autoForm = {
     inputClass: '',
     errorClass: ''
 }
-
+// Dog Form End //
 
 app.mount('#app')

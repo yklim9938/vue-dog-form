@@ -1,6 +1,17 @@
 {
-  "name": "vue-auto-form",
-  "version": "0.0.0",
+  "name": "vue-dog-form",
+  "version": "1.0.0",
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/vue-dog-form.umd.js",
+  "module": "./dist/vue-dog-form.es.js",
+  "exports": {
+    ".": {
+      "import": "./dist/vue-dog-form.es.js",
+      "require": "./dist/vue-dog-form.umd.js"
+    }
+  },
   "scripts": {
     "dev": "vite",
     "build": "vite build",
