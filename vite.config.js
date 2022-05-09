@@ -10,7 +10,7 @@ export default defineConfig({
     lib:  {
       entry: path.resolve(__dirname, "src/index.js"),
       name: "vue-auto-form",
-      fileName: (format) => `${format}.js` 
+      fileName: (format) => `vue-dog-form.${format}.js` 
     },
     rollupOptions: {
       external: ['vue'],

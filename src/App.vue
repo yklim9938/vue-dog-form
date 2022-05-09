@@ -4,8 +4,8 @@
 		<DogForm @submit="submitHandler" novalidate>
 			<div>
 				<div>Name</div>
-				<input type="text" v-model="name" required minlength="2">
-				<DogError v-model="name" required :messages="customMessage" minlength="2" spiderman></DogError>
+				<input type="text" v-model="name" required minlength="2" class="vld">
+				<!-- <DogError v-model="name" required :messages="customMessage" minlength="2" spiderman></DogError> -->
 			</div>
 			<div>
 				<div>Email</div>
