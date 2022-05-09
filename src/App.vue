@@ -22,6 +22,11 @@
 				<input type="password" v-model="confirmPassword">
 				<DogError v-model="confirmPassword" required :equalto="password" ></DogError>
 			</div>
+			<div>
+				<div>File</div>
+				<input type="file" multiple maxsize="2097152" maxfile="3" @change="fileChange">
+				<DogError v-model="file"  maxsize="2097152" maxfile="2" required></DogError>
+			</div>
 			<button type="submit">Submit</button>
 		</DogForm>
 	</div>
@@ -33,10 +38,16 @@ const name = ref('')
 const password = ref('')
 const confirmPassword = ref('')
 const email = ref('')
+const file = ref('')
 
 const submitHandler = (e) => {
 	console.log(e)
 	return
+}
+
+const fileChange = (e) => {
+	console.log(e)
+	file.value=e.target.files
 }
 
 const customMessage = {

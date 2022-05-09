@@ -1,6 +1,6 @@
 const rules = {
     required(val, validateValue) {
-        if (Array.isArray(val) || typeof val == 'string') {
+        if (Array.isArray(val) || typeof val == 'string' || typeof val == 'object') {
             if (val.length < 1) {
                 return {
                     type: 'required'
