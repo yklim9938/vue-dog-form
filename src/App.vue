@@ -4,7 +4,7 @@
 		<DogForm @submit="submitHandler" novalidate>
 			<div>
 				<div>Name</div>
-				<input type="text" v-model="name" required minlength="2" class="vld">
+				<input type="text" v-model="name" required minlength="2" class="vld" multipleof="3">
 				<!-- <DogError v-model="name" required :messages="customMessage" minlength="2" spiderman></DogError> -->
 			</div>
 			<div>
@@ -13,19 +13,17 @@
 				<DogError v-model="email" required validemail></DogError>
 			</div>
 			<div>
-				<div>Password</div>
-				<input type="password" v-model="password">
-				<!-- <DogError v-model="password" required minlength="8"></DogError> -->
-			</div>
-			<div>
-				<div>Confirm Password</div>
-				<input type="password" v-model="confirmPassword">
-				<DogError v-model="confirmPassword" required :equalto="password" ></DogError>
-			</div>
+	<div>Password</div>
+	<input type="password" class="vld" v-model="password" required maxlength="32">
+</div>
+<div>
+	<div>Confirm Password</div>
+	<input type="password" v-model="confirmPassword" class="vld" :equalto="password" maxlength="32">
+</div>
 			<div>
 				<div>File</div>
-				<input type="file" multiple maxsize="2097152" maxfile="3" @change="fileChange">
-				<DogError v-model="file"  maxsize="2097152" maxfile="2" required></DogError>
+				<input type="file" multiple accept="image/*" @change="fileChange">
+				<DogError v-model="file" accept="image/*"  maxsize="2097152" maxfile="2" required></DogError>
 			</div>
 			<button type="submit">Submit</button>
 		</DogForm>
@@ -38,7 +36,7 @@ const name = ref('')
 const password = ref('')
 const confirmPassword = ref('')
 const email = ref('')
-const file = ref('')
+	const file = ref('')
 
 const submitHandler = (e) => {
 	console.log(e)

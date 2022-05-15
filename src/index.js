@@ -11,7 +11,7 @@ export default {
                 required: "This field is required.",
                 minlength: "Input must be at least {n} characters.",
                 maxlength: "Input cannot be more than {n} characters.",
-                equalto: "Input does not match",
+                equalto: "Input value does not match.",
                 validemail: "Please enter a valid email.",
                 min: "Minimum value is {n}.",
                 max: "Maximum value is {n}.",

@@ -8,14 +8,17 @@ app.use(DogForm)
 
 const $dogForm = app.config.globalProperties.$dogForm
 $dogForm.customRules = {
-    spiderman(val) {
-        if (val != 'spiderman') {
+    multipleof(val, validateValue) {
+        if (Number(val) % validateValue != 0) {
             return {
-                type: 'spiderman'
+                type: 'multipleof',
+                value: {
+                    n: validateValue
+                }
             }
         }
     }
 }
 
-$dogForm.validationMessages.spiderman = 'Input must be "spiderman"'
+$dogForm.validationMessages.multipleof = 'Value must be multiple of {n}'
 app.mount('#app')
