@@ -3,9 +3,12 @@
 Simplest yet flexible form validation plugin for Vue 3.
 
 ## Installation
+
 ```
 npm i vue-dog-form
 ```
+
+### Vue 3
 
 In main.js
 ```
@@ -19,6 +22,24 @@ app.component('DogError', DogError)
 app.config.globalProperties.$dogForm = $dogForm // mandatory
 
 app.mount('#app')
+```
+
+### Nuxt 3
+
+Create a plugin ```plugins/DogForm.js``` with the following content:
+```
+import {DogForm, DogError, $dogForm} from 'vue-dog-form'
+
+export default defineNuxtPlugin(nuxtApp => {
+    nuxtApp.vueApp.component('DogForm', DogForm)
+    nuxtApp.vueApp.component('DogError', DogError)
+ 
+    return {
+        provide: {
+            dogForm: $dogForm
+        }
+    }
+})
 ```
 
 ## Basic Usage
@@ -129,7 +150,7 @@ E.g. Change the default validation message for *required* validation
 $dogForm.validationMessages.required = 'Please fill in.'
 ```
 
-Alternatively, you can overwrite the whole ```validationMessage``` with your own set of messages
+Alternatively, you can overwrite the whole ```validationMessage``` with your own set of messages.
 
 ### Translation for validation message
 
@@ -178,7 +199,7 @@ app.mount('#app')
 ```
 
 ### Add custom validation rules
-E.g. Add a custom attribute that check whether input value is multiple of 3
+E.g. Add a custom attribute that check whether input value is multiple of 3.
 
 ```
 <input type="number" class="vld" multipleof="3">
@@ -203,7 +224,7 @@ $dogForm.customRules = {
 $dogForm.validationMessages.multipleof = 'Value must be multiple of {n}'
 ```
 
-**Note** validation attributes must be small caps
+**Note** *validation attributes must be small caps
 
 ## Usage Examples
 
@@ -247,4 +268,3 @@ Simply add a ```novalidate``` attribute on ```DogForm```
 <!-- Your inputs -->
 </DogForm>
 ```
-
