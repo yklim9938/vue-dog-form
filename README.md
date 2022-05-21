@@ -1,13 +1,12 @@
 # Vue-Dog-Form
 
-Simplest yet flexible form validation plugin for Vue.
+Simplest yet flexible form validation plugin for Vue 3.
 
 ## Installation
 ```
 npm i vue-dog-form
 ```
 
-### Vue
 In main.js
 ```
 import { createApp } from 'vue'
