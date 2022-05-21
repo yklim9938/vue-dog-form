@@ -5,7 +5,7 @@
 			<div>
 				<div>Name</div>
 				<input type="text" v-model="name" required minlength="2" class="vld" multipleof="3">
-				<!-- <DogError v-model="name" required :messages="customMessage" minlength="2" spiderman></DogError> -->
+				<!-- <DogError v-model="name" required :messages="customMessage" minlength="2"></DogError> -->
 			</div>
 			<div>
 				<div>Email</div>
