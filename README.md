@@ -12,10 +12,12 @@ In main.js
 ```
 import { createApp } from 'vue'
 import App from './App.vue'
-import DogForm from 'vue-dog-form'
+import {DogForm, DogError, $dogForm} from 'vue-dog-form'
 
 const app = createApp(App)
-app.use(DogForm)
+app.component('DogForm', DogForm)
+app.component('DogError', DogError)
+app.config.globalProperties.$dogForm = $dogForm // mandatory
 
 app.mount('#app')
 ```
@@ -23,7 +25,7 @@ app.mount('#app')
 ## Basic Usage
 
 1. Build your form as usual, but wrap it in a ```<DogForm>``` component.
-2. Put a '.vld' class in the inputs that you want to validate.
+2. Add a '.vld' class in the inputs that you want to validate.
 
 ```<DogForm>``` will automatically pick up attributes such as ```required``` and ```minlength``` and add validation message below the input.
 
@@ -42,7 +44,7 @@ app.mount('#app')
 
 <script setup>
 const submitHandler = (e) => {
-    // You don't have to call e.preventDefault(). it's prevented automatically.
+    // You don't have to call e.preventDefault(). It's prevented automatically.
 
     if (!e.isValid) return // stop if form is not valid
 
@@ -87,11 +89,10 @@ const customMessage = {
 
 ## Configurations
 
-You change configuration of DogForm in main.js after ```app.use(DogForm)```
+You can change configuration of DogForm in ```$dogForm``` after importing.
 
 ```
-app.use(DogForm)
-const $dogForm = app.config.globalProperties.$dogForm
+import {DogForm, DogError, $dogForm} from 'vue-dog-form'
 // $dogForm holds all the configuration
 ```
 
@@ -120,6 +121,8 @@ const $dogForm = app.config.globalProperties.$dogForm
 }
 ```
 
+## Configuration Examples
+
 ### Changing default validation message globally
 
 E.g. Change the default validation message for *required* validation
@@ -137,12 +140,11 @@ in main.js
 ```
 import { createApp } from 'vue'
 import App from './App.vue'
-import DogForm from 'vue-dog-form'
+import {DogForm, DogError, $dogForm} from 'vue-dog-form'
 import { createI18n } from 'vue-i18n'
 
 const messages = {
     cn: {
-        hello: '哈喽世界',
         error_required: "这是必填栏。",
         error_minlength: "输入至少要有 {n} 个字符。",
         error_maxlength: "输入不可超过 {n} 个字符。",
@@ -163,12 +165,15 @@ const i18n = createI18n({
     messages
 })
 app.use(i18n)
-app.use(DogForm)
 
 $dogForm.message = (error) => {
     const translateKey = `error_${error.type}`
     return error.value?.n ? i18n.global.t(translateKey, {n : error.value.n}) : i18n.global.t(translateKey)    
 }
+
+app.component('DogForm', DogForm)
+app.component('DogError', DogError)
+app.config.globalProperties.$dogForm = $dogForm
 
 app.mount('#app')
 ```
@@ -201,7 +206,7 @@ $dogForm.validationMessages.multipleof = 'Value must be multiple of {n}'
 
 **Note** validation attributes must be small caps
 
-## Examples
+## Usage Examples
 
 ### Password And Confirm Password
 
