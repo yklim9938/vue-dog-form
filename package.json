@@ -12,6 +12,10 @@
       "require": "./dist/vue-dog-form.umd.js"
     }
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yklim9938/vue-dog-form"
+  },
   "scripts": {
     "dev": "vite",
     "build": "vite build",
