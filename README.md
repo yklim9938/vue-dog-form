@@ -73,6 +73,8 @@ const submitHandler = (e) => {
 </script>
 ```
 
+**Note** *By default, error messages has no styling. You can style it with the ```._dog-error``` class.
+
 ## Built-In Validations
 - ```required```
 - ```minlength="3"```
