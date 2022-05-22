@@ -2,9 +2,13 @@
   "name": "vue-dog-form",
   "description": "The simplest vue 3 form validation plugin.",
   "author": "yklim9938",
-  "keywords": ["vue", "form", "validation"],
+  "keywords": [
+    "vue",
+    "form",
+    "validation"
+  ],
   "license": "MIT",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "files": [
     "dist"
   ],
