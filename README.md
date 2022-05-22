@@ -1,4 +1,4 @@
-# Vue-Dog-Form
+# Vue-Dog-Form 🐶
 
 Simplest yet flexible form validation plugin for Vue 3.
 
@@ -76,6 +76,7 @@ const submitHandler = (e) => {
 **Note** *By default, error messages has no styling. You can style it with the ```._dog-error``` class.
 
 ## Built-In Validations
+
 - ```required```
 - ```minlength="3"```
 - ```maxlength="10"```
@@ -86,7 +87,7 @@ const submitHandler = (e) => {
 - ```maxsize="5242880"``` *5Mb* (set the maximum file size **bytes** allowed in file input)
 - ```validnumber``` (input value can only have numbers)
 - ```validemail``` (input value must be an email)
-- ```:equalto="otherState"``` (input value must equal to the value of *otherState*, useful for confirming password)
+- ```:equalto="otherState"``` (input value must equal to the value of *otherState*, useful for confirming password) [Example](#Password-And-Confirm-Password)
 
 ## Validation for custom input components
 
@@ -232,16 +233,45 @@ $dogForm.validationMessages.multipleof = 'Value must be multiple of {n}'
 
 ### Password And Confirm Password
 
-Use ```<DogError>```
 ```
 <div>
-	<label>Password</label>
-	<input type="password" class="vld" v-model="password" required maxlength="32">
+    <label>Password</label>
+    <input type="password" class="vld" v-model="password" required maxlength="32">
 </div>
 <div>
-	<label>Confirm Password</label>
-	<input type="password" v-model="confirmPassword" class="vld" :equalto="password" maxlength="32">
+    <label>Confirm Password</label>
+    <input type="password" v-model="confirmPassword" class="vld" :equalto="password" maxlength="32">
 </div>
+```
+
+Using the `.vld` class is simple and straightforward. However, the confirm password input won't validate when the user changes the first password input.
+
+To solve this issue, we can use `<DogError>`
+
+```
+<div>
+    <label>Password</label>
+    <input type="password" class="vld" v-model="password" required maxlength="32">
+</div>
+<div>
+    <label>Confirm Password</label>
+    <DogError v-model="confirmPassword" :equalto="password" maxlength="32" ref="cpErr"></DogError>
+</div>
+
+<script setup>
+import { ref, watch } from 'vue'
+
+const password = ref('')
+const confirmPassword = ref('')
+const cpErr = ref(null)
+watch(password, (newValue, oldValue) => {
+    if (newValue) {
+        setTimeout(() => { // wait for <DogError> to take up the new password
+            cpErr.value.validate()
+        }, 100)
+    }
+})
+</script>
 ```
 
 ### File Input Validations
@@ -256,7 +286,7 @@ We cannot use v-model on file input. To validate file input, we must use ```<Dog
 const file = ref('')
 
 const fileChange = (e) => {
-	file.value=e.target.files
+    file.value=e.target.files
 }
 </script>
 ```
@@ -270,3 +300,7 @@ Simply add a ```novalidate``` attribute on ```DogForm```
 <!-- Your inputs -->
 </DogForm>
 ```
+
+---
+
+Made by [yklim](https://www.buymeacoffee.com/yklim) 😊
