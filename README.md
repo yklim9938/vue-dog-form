@@ -45,7 +45,7 @@ export default defineNuxtPlugin(nuxtApp => {
 ## Basic Usage
 
 1. Build your form as usual, but wrap it in a ```<DogForm>``` component.
-2. Add a '.vld' class in the inputs that you want to validate.
+2. Add a '.vld' class to the inputs that you want to validate.
 
 ```<DogForm>``` will automatically pick up attributes such as ```required``` and ```minlength``` and add validation message below the input.
 
@@ -105,7 +105,7 @@ You must use ```<DogError>``` for custom validation message.
 
 <script setup>
 const customMessage = {
-	required: 'Name is required',
+    required: 'Name is required',
 }
 </script>
 ```
@@ -255,6 +255,7 @@ To solve this issue, we can use `<DogError>`
 </div>
 <div>
     <label>Confirm Password</label>
+    <input type="password" v-model="confirmPassword" />
     <DogError v-model="confirmPassword" :equalto="password" maxlength="32" ref="cpErr"></DogError>
 </div>
 
