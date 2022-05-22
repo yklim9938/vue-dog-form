@@ -107,6 +107,7 @@ You must use ```<DogError>``` for custom validation message.
 const customMessage = {
     required: 'Name is required',
 }
+// since minlength is not specified in ```customMessage```, it will use the default validation message
 </script>
 ```
 
