@@ -32,7 +32,7 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue'
+import { nextTick, ref, watch } from 'vue'
 const customMessage = {
 	required: 'Name is required',
 }
@@ -40,12 +40,12 @@ const name = ref('')
 const password = ref('')
 const confirmPassword = ref('')
 const cpErr = ref(null)
-watch(password, (n, o) => {
-if (n) {
-		setTimeout(() => {
-			cpErr.value.validate()
-		}, 100)
-	}
+watch(password, (newValue, oldValue) => {
+    if (newValue && confirmPassword) {
+        nextTick(() => { // wait for <DogError> to take up the new password
+            cpErr.value.validate()
+        })
+    }
 })
 const email = ref('')
 const file = ref('')

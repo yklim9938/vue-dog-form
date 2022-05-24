@@ -267,10 +267,10 @@ const password = ref('')
 const confirmPassword = ref('')
 const cpErr = ref(null)
 watch(password, (newValue, oldValue) => {
-    if (newValue) {
-        setTimeout(() => { // wait for <DogError> to take up the new password
+    if (newValue && confirmPassword) {
+        nextTick(() => { // wait for <DogError> to take up the new password
             cpErr.value.validate()
-        }, 100)
+        })
     }
 })
 </script>
