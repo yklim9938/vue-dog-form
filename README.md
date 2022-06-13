@@ -203,7 +203,7 @@ app.mount('#app')
 ```
 
 ### Add custom validation rules
-E.g. Add a custom attribute that check whether input value is multiple of 3.
+E.g. Add a custom attribute that checks whether input value is multiple of 3.
 
 ```
 <input type="number" class="vld" multipleof="3">

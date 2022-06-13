@@ -1,5 +1,5 @@
 <template>
-    <div :class="errorClass" v-if="errorMsg">{{errorMsg}}</div>
+    <div class="_df_ErrMsg" :class="errorClass" v-if="errorMsg">{{errorMsg}}</div>
 </template>
 
 <script>
@@ -47,10 +47,16 @@ export default {
                 }
                 return error
             }
+        },
+        clear() {
+            this.errorMsg = ''
         }
     },
     mounted() {
-        this.dogErrors.push(this.validate)
+        this.dogErrors.push({
+            validate: this.validate,
+            clear: this.clear
+        })
     },
     watch: {
         modelValue() {

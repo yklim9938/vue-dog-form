@@ -1,7 +1,7 @@
 
 <template>
 	<div>
-		<DogForm @submit="submitHandler" novalidate>
+		<DogForm @submit="submitHandler" novalidate ref="formRef">
 			<div>
 				<div>Name</div>
 				<input type="text" v-model="name" required minlength="2" class="vld" multipleof="3" />
@@ -27,6 +27,9 @@
 				<DogError v-model="file" accept="image/*" maxsize="2097152" maxfile="2" required></DogError>
 			</div>
 			<button type="submit">Submit</button>
+			<div>
+				<button type="reset" @click="clearForm">Reset</button>
+			</div>
 		</DogForm>
 	</div>
 </template>
@@ -57,6 +60,13 @@ const fileChange = (e) => {
 const submitHandler = (e) => {
 	console.log(e)
 	return
+}
+
+const formRef = ref(null)
+const clearForm = (e) => {
+	// nextTick(() => { // wait for <DogError> to take up the new password
+		formRef.value.clearErrors()
+	// })
 }
 
 </script>

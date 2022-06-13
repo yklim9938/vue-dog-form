@@ -48,6 +48,7 @@ export default {
                     const errorEl = document.createElement('div')
                     errorEl.classList.add(this.errorClass)
                     errorEl.innerHTML = this.$dogForm.message(error)
+                    console.log(input.parentElement)
                     input.parentElement.insertBefore(errorEl, input.nextSibling)
                 }
             }
@@ -66,13 +67,25 @@ export default {
         getErrorEl(wrapper) {
             return wrapper.querySelectorAll(`.${this.errorClass}`)
         },
+        clearErrors() {
+			const errorEls = this.getErrorEl(this.$refs.form);
+			errorEls.forEach((e) => {
+                if (!e.classList.contains('_df_ErrMsg')) {
+                    e.remove()
+                }
+            });
+
+			this.dogErrors.forEach((v) => {
+				v.clear();
+			});
+		},
         dogSubmit(e) {
             this.inputs.forEach(i => {
                 this.validateInput(i)
             })
 
             this.dogErrors.forEach(v => {
-                v()
+                v.validate()
             })
 
             setTimeout(() => {
