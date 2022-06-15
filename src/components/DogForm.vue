@@ -48,7 +48,6 @@ export default {
                     const errorEl = document.createElement('div')
                     errorEl.classList.add(this.errorClass)
                     errorEl.innerHTML = this.$dogForm.message(error)
-                    console.log(input.parentElement)
                     input.parentElement.insertBefore(errorEl, input.nextSibling)
                 }
             }
