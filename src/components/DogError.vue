@@ -15,7 +15,8 @@ export default {
     data() {
         return {
             errorMsg: '',
-            errorClass: this.$dogForm.errorClass || '_dog-error'
+            errorClass: this.$dogForm.errorClass || '_dog-error',
+            id: Math.random().toString()
         }
     },
     methods: {
@@ -54,9 +55,14 @@ export default {
     },
     mounted() {
         this.dogErrors.push({
+            id: this.id,
             validate: this.validate,
             clear: this.clear
         })
+    },
+    beforeUnmount() {
+        const targetIndex = this.dogErrors.findIndex(d => d.id == this.id)
+        this.dogErrors.splice(targetIndex, 1)
     },
     watch: {
         modelValue() {

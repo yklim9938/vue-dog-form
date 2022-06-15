@@ -4,17 +4,18 @@
 		<DogForm @submit="submitHandler" novalidate ref="formRef">
 			<div>
 				<div>Name</div>
-				<input type="text" v-model="name" required minlength="2" class="vld" multipleof="3" />
-				<!-- <DogError v-model="name" required :messages="customMessage" minlength="2"></DogError> -->
+				<input type="text" v-model="name" required minlength="2" multipleof="3" />
+				<DogError v-model="name" required :messages="customMessage" minlength="2"></DogError>
 			</div>
-			<div>
+			<div v-if="!noEmail">
 				<div>Email</div>
 				<input type="email" v-model="email" />
 				<DogError v-model="email" required validemail></DogError>
 			</div>
 			<div>
 				<div>Password</div>
-				<input type="password" class="vld" v-model="password" required maxlength="32" />
+				<input type="password" v-model="password" required maxlength="32" />
+				<DogError v-model="password" required maxlength="32"></DogError>
 			</div>
 			<div>
 				<div>Confirm Password</div>
@@ -31,6 +32,9 @@
 				<button type="reset" @click="clearForm">Reset</button>
 			</div>
 		</DogForm>
+			<div>
+				<button type="button" @click="noEmail = !noEmail">No Email</button>
+			</div>
 	</div>
 </template>
 
@@ -68,6 +72,8 @@ const clearForm = (e) => {
 		formRef.value.clearErrors()
 	// })
 }
+
+const noEmail = ref(false)
 
 </script>
 <style>
