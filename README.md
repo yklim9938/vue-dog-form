@@ -271,12 +271,12 @@ const fileChange = (e) => {
 
 ### Remove browser's default validation
 
-Simply add a ```novalidate``` attribute on ```DogForm```
+Simply add a ```novalidate``` attribute on ```DForm```
 
 ```
-<DogForm @submit="submitHandler" novalidate>
+<DForm @submit="submitHandler" novalidate>
 <!-- Your inputs -->
-</DogForm>
+</DForm>
 ```
 
 ---

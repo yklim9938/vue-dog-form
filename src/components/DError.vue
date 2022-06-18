@@ -6,7 +6,7 @@
 import validation from '@/assets/validation'
 
 export default {
-    name: 'DogError',
+    name: 'DError',
     inject: ['dogErrors'],
     props: {
         modelValue: [String, Number, Object, Array],

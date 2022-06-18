@@ -7,7 +7,7 @@
 <script>
 export default {
     inheritAttrs: false,
-    name: 'DogForm',
+    name: 'DForm',
     props: {
         novalidate: Boolean
     },
