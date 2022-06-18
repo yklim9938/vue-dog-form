@@ -1,10 +1,10 @@
 import { createApp } from 'vue'
 import App from './App.vue'
-import {DogForm, DogError, $dogForm} from './index.js'
+import {DForm, DError, $dForm} from './index.js'
 
 const app = createApp(App)
 
-$dogForm.customRules = {
+$dForm.customRules = {
     multipleof(val, validateValue) {
         if (Number(val) % validateValue != 0) {
             return {
@@ -16,10 +16,10 @@ $dogForm.customRules = {
         }
     }
 }
-$dogForm.validationMessages.multipleof = 'Value must be multiple of {n}'
+$dForm.validationMessages.multipleof = 'Value must be multiple of {n}'
 
-app.component('DogForm', DogForm)
-app.component('DogError', DogError)
-app.config.globalProperties.$dogForm = $dogForm
+app.component('DForm', DForm)
+app.component('DError', DError)
+app.config.globalProperties.$dForm = $dForm
 
 app.mount('#app')

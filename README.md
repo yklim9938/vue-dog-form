@@ -14,12 +14,12 @@ In main.js
 ```
 import { createApp } from 'vue'
 import App from './App.vue'
-import {DogForm, DogError, $dogForm} from 'vue-dog-form'
+import {DForm, DError, $dForm} from 'vue-dog-form'
 
 const app = createApp(App)
-app.component('DogForm', DogForm)
-app.component('DogError', DogError)
-app.config.globalProperties.$dogForm = $dogForm // mandatory
+app.component('DForm', DForm)
+app.component('DError', DError)
+app.config.globalProperties.$dForm = $dForm // mandatory
 
 app.mount('#app')
 ```
@@ -28,15 +28,15 @@ app.mount('#app')
 
 Create a plugin ```plugins/DogForm.js``` with the following content:
 ```
-import {DogForm, DogError, $dogForm} from 'vue-dog-form'
+import {DForm, DError, $dForm} from 'vue-dog-form'
 
 export default defineNuxtPlugin(nuxtApp => {
-    nuxtApp.vueApp.component('DogForm', DogForm)
-    nuxtApp.vueApp.component('DogError', DogError)
+    nuxtApp.vueApp.component('DForm', DForm)
+    nuxtApp.vueApp.component('DError', DError)
  
     return {
         provide: {
-            dogForm: $dogForm
+            dForm: $dForm
         }
     }
 })
@@ -44,23 +44,23 @@ export default defineNuxtPlugin(nuxtApp => {
 
 ## Basic Usage
 
-1. Build your form as usual, but wrap it in a ```<DogForm>``` component.
-2. Add a '.vld' class to the inputs that you want to validate.
-
-```<DogForm>``` will automatically pick up attributes such as ```required``` and ```minlength``` and add validation message below the input.
+1. Build your form as usual, but wrap it in a ```<DForm>``` component.
+2. Add `<DError>` with validation attributes. 
 
 ```
-<DogForm @submit="submitHandler">
+<DForm @submit="submitHandler">
     <div>
         <label>Name</label>
-        <input type="text" v-model="name" required minlength="3" class="vld">
+        <input type="text" v-model="name">
+        <DError v-model="name" required minlength="3"/>
     </div>
     <div>
         <label>Password</label>
-        <input type="password" v-model="password" required class="vld">
+        <input type="password" v-model="password">
+        <DError v-model="password" required/>
     </div>
     <button type="submit">Submit</button>
-</DogForm>
+</DForm>
 
 <script setup>
 const submitHandler = (e) => {
@@ -73,7 +73,7 @@ const submitHandler = (e) => {
 </script>
 ```
 
-**Note** *By default, error messages has no styling. You can style it with the ```._dog-error``` class.
+**Note** *By default, error messages has no styling. You can style it with the ```._df_ErrMsg``` class.
 
 ## Built-In Validations
 
@@ -89,17 +89,8 @@ const submitHandler = (e) => {
 - ```validemail``` (input value must be an email)
 - ```:equalto="otherState"``` (input value must equal to the value of *otherState*, useful for confirming password) [Example](#Password-And-Confirm-Password)
 
-## Validation for custom input components
-
-Sometimes you have custom input components that don't support validation attributes. In this case, you can use the ```<DogError>``` component.
-
-```
-<CustomInput v-model="username"></CustomInput>
-<DogError v-model="username" required maxlength="20"></DogError>
-```
-
 ## Custom validation message
-You must use ```<DogError>``` for custom validation message.
+Use `messages` prop to show custom validation messages.
 ```
 <DogError v-model="name" required minlength="2" :messages="customMessage"></DogError>
 
@@ -107,20 +98,20 @@ You must use ```<DogError>``` for custom validation message.
 const customMessage = {
     required: 'Name is required',
 }
-// since minlength is not specified in ```customMessage```, it will use the default validation message
+// since minlength is not specified in 'customMessage', it will use the default validation message
 </script>
 ```
 
 ## Configurations
 
-You can change configuration of DogForm in ```$dogForm``` after importing.
+You can change configuration of DogForm in ```$dForm``` after importing.
 
 ```
-import {DogForm, DogError, $dogForm} from 'vue-dog-form'
-// $dogForm holds all the configuration
+import {DForm, DError, $dForm} from 'vue-dog-form'
+// $dForm holds all the configuration
 ```
 
-### Default structure of ```$dogForm```:
+### Default structure of ```$dForm```:
 ```
 {
     validationMessages: { // Default validation messages
@@ -139,9 +130,7 @@ import {DogForm, DogError, $dogForm} from 'vue-dog-form'
     message(error) {
         // the function that generate validation message based on the error type
         return error.value?.n ? this.validationMessages[error.type].replace(/{n}/g, error.value.n) : this.validationMessages[error.type] || error.type
-    },
-    inputClass: 'vld', // The class on the input for DogForm to pick up
-    errorClass: '_dog-error' // The class of the error message element
+    }
 }
 ```
 
@@ -151,12 +140,12 @@ import {DogForm, DogError, $dogForm} from 'vue-dog-form'
 
 E.g. Change the default validation message for *required* validation
 ```
-$dogForm.validationMessages.required = 'Please fill in.'
+$dForm.validationMessages.required = 'Please fill in.'
 ```
 
 Alternatively, you can overwrite the whole ```validationMessage``` with your own set of messages.
 
-### Translation for validation message
+### Translating validation message
 
 #### Using vue-i18n
 in main.js
@@ -164,7 +153,7 @@ in main.js
 ```
 import { createApp } from 'vue'
 import App from './App.vue'
-import {DogForm, DogError, $dogForm} from 'vue-dog-form'
+import {DForm, DError, $dForm} from 'vue-dog-form'
 import { createI18n } from 'vue-i18n'
 
 const messages = {
@@ -190,14 +179,14 @@ const i18n = createI18n({
 })
 app.use(i18n)
 
-$dogForm.message = (error) => {
+$dForm.message = (error) => {
     const translateKey = `error_${error.type}`
     return error.value?.n ? i18n.global.t(translateKey, {n : error.value.n}) : i18n.global.t(translateKey)    
 }
 
-app.component('DogForm', DogForm)
-app.component('DogError', DogError)
-app.config.globalProperties.$dogForm = $dogForm
+app.component('DForm', DForm)
+app.component('DError', DError)
+app.config.globalProperties.$dForm = $dForm
 
 app.mount('#app')
 ```
@@ -206,10 +195,12 @@ app.mount('#app')
 E.g. Add a custom attribute that checks whether input value is multiple of 3.
 
 ```
-<input type="number" class="vld" multipleof="3">
+<input type="number" v-model="answer">
+<DError v-model="answer" multiple="3" />
 ```
+
 ```
-$dogForm.customRules = {
+$dForm.customRules = {
     multipleof(val, validateValue) {
         // val is your input's value,
         // validateValue is the value you passed in the attribute, in this case, 3
@@ -225,7 +216,7 @@ $dogForm.customRules = {
     }
 }
 
-$dogForm.validationMessages.multipleof = 'Value must be multiple of {n}'
+$dForm.validationMessages.multipleof = 'Value must be multiple of {n}'
 ```
 
 **Note** *validation attributes must be small caps
@@ -237,27 +228,12 @@ $dogForm.validationMessages.multipleof = 'Value must be multiple of {n}'
 ```
 <div>
     <label>Password</label>
-    <input type="password" class="vld" v-model="password" required maxlength="32">
-</div>
-<div>
-    <label>Confirm Password</label>
-    <input type="password" v-model="confirmPassword" class="vld" :equalto="password" maxlength="32">
-</div>
-```
-
-Using the `.vld` class is simple and straightforward. However, the confirm password input won't validate when the user changes the first password input.
-
-To solve this issue, we can use `<DogError>`
-
-```
-<div>
-    <label>Password</label>
-    <input type="password" class="vld" v-model="password" required maxlength="32">
+    <input type="password" v-model="password">
 </div>
 <div>
     <label>Confirm Password</label>
     <input type="password" v-model="confirmPassword" />
-    <DogError v-model="confirmPassword" :equalto="password" maxlength="32" ref="cpErr"></DogError>
+    <DError v-model="confirmPassword" :equalto="password" ref="cpErr"/>
 </div>
 
 <script setup>
@@ -268,7 +244,7 @@ const confirmPassword = ref('')
 const cpErr = ref(null)
 watch(password, (newValue, oldValue) => {
     if (newValue && confirmPassword) {
-        nextTick(() => { // wait for <DogError> to take up the new password
+        nextTick(() => { // wait for <DError> to take up the new password
             cpErr.value.validate()
         })
     }
@@ -278,11 +254,11 @@ watch(password, (newValue, oldValue) => {
 
 ### File Input Validations
 
-We cannot use v-model on file input. To validate file input, we must use ```<DogError>```.
+We cannot use v-model on file input. To validate file input, we must use ```<DError>```.
 
 ```
 <input type="file" multiple @change="fileChange">
-<DogError v-model="file"  maxsize="2097152" maxfile="2" required></DogError>
+<DError v-model="file"  maxsize="2097152" maxfile="2" required />
 
 <script setup>
 const file = ref('')

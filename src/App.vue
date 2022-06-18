@@ -1,37 +1,37 @@
 
 <template>
 	<div>
-		<DogForm @submit="submitHandler" novalidate ref="formRef">
+		<DForm @submit="submitHandler" novalidate ref="formRef">
 			<div>
 				<div>Name</div>
-				<input type="text" v-model="name" required minlength="2" multipleof="3" />
-				<DogError v-model="name" required :messages="customMessage" minlength="2"></DogError>
+				<input type="text" v-model="name"/>
+				<DError v-model="name" required :messages="customMessage" minlength="2" multipleof="3"/>
 			</div>
 			<div v-if="!noEmail">
 				<div>Email</div>
 				<input type="email" v-model="email" />
-				<DogError v-model="email" required validemail></DogError>
+				<DError v-model="email" required validemail />
 			</div>
 			<div>
 				<div>Password</div>
 				<input type="password" v-model="password" required maxlength="32" />
-				<DogError v-model="password" required maxlength="32"></DogError>
+				<DError v-model="password" required maxlength="32" />
 			</div>
 			<div>
 				<div>Confirm Password</div>
 				<input type="password" v-model="confirmPassword" />
-				<DogError v-model="confirmPassword" :equalto="password" maxlength="32" ref="cpErr"></DogError>
+				<DError v-model="confirmPassword" :equalto="password" maxlength="32" ref="cpErr" />
 			</div>
 			<div>
 				<div>File</div>
 				<input type="file" multiple accept="image/*" @change="fileChange" />
-				<DogError v-model="file" accept="image/*" maxsize="2097152" maxfile="2" required></DogError>
+				<DError v-model="file" accept="image/*" maxsize="2097152" maxfile="2" required />
 			</div>
 			<button type="submit">Submit</button>
 			<div>
 				<button type="reset" @click="clearForm">Reset</button>
 			</div>
-		</DogForm>
+		</DForm>
 			<div>
 				<button type="button" @click="noEmail = !noEmail">No Email</button>
 			</div>

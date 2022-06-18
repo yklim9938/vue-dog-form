@@ -1,6 +1,6 @@
-import DogForm from './components/DogForm.vue'
-import DogError from './components/DogError.vue'
-const $dogForm = {
+import DForm from './components/DForm.vue'
+import DError from './components/DError.vue'
+const $dForm = {
     validationMessages: {
         required: "This field is required.",
         minlength: "Input must be at least {n} characters.",
@@ -17,9 +17,7 @@ const $dogForm = {
     message(error) {
         return error.value?.n ? this.validationMessages[error.type].replace(/{n}/g, error.value.n) : this.validationMessages[error.type] || error.type
     },
-    customRules: {},
-    inputClass: 'vld',
-    errorClass: '_dog-error'
+    customRules: {}
 }
 
-export {DogForm, DogError, $dogForm}
+export {DForm, DError, $dForm}

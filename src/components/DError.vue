@@ -1,5 +1,5 @@
 <template>
-    <div class="_df_ErrMsg" :class="errorClass" v-if="errorMsg">{{errorMsg}}</div>
+    <div class="_df_ErrMsg" :class="$props.class" v-if="errorMsg">{{errorMsg}}</div>
 </template>
 
 <script>
@@ -15,7 +15,6 @@ export default {
     data() {
         return {
             errorMsg: '',
-            errorClass: this.$dogForm.errorClass || '_dog-error',
             id: Math.random().toString()
         }
     },
@@ -32,16 +31,17 @@ export default {
                     if (validation[rule]) {
                         error = validation[rule](this.modelValue, ruleVal)
                     }
-                    else if (this.$dogForm.customRules && typeof this.$dogForm.customRules[rule] == 'function') {
-                        error = this.$dogForm.customRules[rule](this.modelValue, ruleVal)
+                    else if (typeof this.$dForm.customRules == 'object' && typeof this.$dForm.customRules[rule] == 'function') {
+                        error = this.$dForm.customRules[rule](this.modelValue, ruleVal)
                     }
+
                     if (error && error.type) {
                         if (this.messages && this.messages[error.type]) {
                             this.errorMsg = this.messages[error.type]
                             break
                         }
                         else {
-                            this.errorMsg = this.$dogForm.message(error)
+                            this.errorMsg = this.$dForm.message(error)
                             break
                         }
                     }
