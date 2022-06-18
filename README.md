@@ -92,7 +92,7 @@ const submitHandler = (e) => {
 ## Custom validation message
 Use `messages` prop to show custom validation messages.
 ```
-<DogError v-model="name" required minlength="2" :messages="customMessage"></DogError>
+<DError v-model="name" required minlength="2" :messages="customMessage" />
 
 <script setup>
 const customMessage = {
