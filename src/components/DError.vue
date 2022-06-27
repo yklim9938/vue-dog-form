@@ -48,6 +48,7 @@ export default {
                 }
                 return error
             }
+            return {}
         },
         clear() {
             this.errorMsg = ''
