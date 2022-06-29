@@ -22,7 +22,7 @@ export default {
         validate() {
             this.errorMsg = ''
             if (this.modelValue != undefined && this.modelValue != null) {
-                if ((!('required' in this.$attrs) || (typeof this.$attrs.required == 'boolean' && !this.$attrs.required)) && typeof this.modelValue == 'string' && this.modelValue.length < 1) return {}
+                if ((!('required' in this.$attrs) || (typeof this.$attrs.required == 'boolean' && !this.$attrs.required)) && (typeof this.value == 'string' || Array.isArray(this.value)) && this.modelValue.length < 1) return {}
                 let error = {}
              
                 for (let rule in this.$attrs) {
