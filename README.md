@@ -85,7 +85,6 @@ const submitHandler = (e) => {
 - ```accept="image/*"``` (for validating file types in file input)
 - ```maxfile="2"``` (set the maximum number of files allowed in file input)  [Example](#File-Input-Validations)
 - ```maxsize="5242880"``` *5Mb* (set the maximum file size **bytes** allowed in file input)
-- ```validnumber``` (input value can only have numbers)
 - ```validemail``` (input value must be an email)
 - ```:equalto="otherState"``` (input value must equal to the value of *otherState*, useful for confirming password) [Example](#Password-And-Confirm-Password)
 
@@ -102,6 +101,30 @@ const customMessage = {
 </script>
 ```
 
+## Adding Invalid Class to Inputs
+
+Use the `target` prop on `<DError>` as css selector to select elements. Selected elements will have `.invalid` class added when the input is invalid.
+```
+<input type="email" id="emailInput" v-model="name"/>
+<DError v-model="name" required validemail target="#emailInput" />
+```
+
+## Clearing Form Errors
+
+You can call the `clearErros()` method on `<DForm>` to clear all errors.
+```
+<DForm ref="formRef">
+    <!-- ...your inputs -->
+    <button type="reset" @click="clearForm">Reset</button>
+</DForm>
+
+<script setup>
+const formRef = ref(null)
+const clearForm = (e) => {
+	formRef.value.clearErrors()
+}
+</script>
+```
 ## Configurations
 
 You can change configuration of DogForm in ```$dForm``` after importing.
@@ -124,11 +147,10 @@ import {DForm, DError, $dForm} from 'vue-dog-form'
         max: "Maximum value is {n}.",
         accept: "File(s) extension is not accepted.",
         maxfile: "Please select not more than {n} files.",
-        maxsize: "File(s) must less than {n}Mb.",
-        validnumber: "Input must be a number.",
+        maxsize: "File(s) must less than {n}Mb."
     },
     message(error) {
-        // the function that generate validation message based on the error type
+        // generate validation message based on the error type
         return error.value?.n ? this.validationMessages[error.type].replace(/{n}/g, error.value.n) : this.validationMessages[error.type] || error.type
     }
 }
@@ -167,8 +189,7 @@ const messages = {
         error_max: "最大值为 {n}。",
         error_accept: "副档不被接受。",
         error_maxfile: "请选择不多于 {n} 个文件。",
-        error_maxsize: "文件必须少于 {n}Mb。",
-        error_validnumber: "输入必须为数字。",
+        error_maxsize: "文件必须少于 {n}Mb。"
     }
 }
 
@@ -213,6 +234,7 @@ $dForm.customRules = {
                 }
             }
         }
+        return {} // return empty object if there's no error
     }
 }
 
@@ -243,7 +265,7 @@ const password = ref('')
 const confirmPassword = ref('')
 const cpErr = ref(null)
 watch(password, (newValue, oldValue) => {
-    if (newValue && confirmPassword) {
+    if (newValue && confirmPassword.value) {
         nextTick(() => { // wait for <DError> to take up the new password
             cpErr.value.validate()
         })
@@ -253,8 +275,6 @@ watch(password, (newValue, oldValue) => {
 ```
 
 ### File Input Validations
-
-We cannot use v-model on file input. To validate file input, we must use ```<DError>```.
 
 ```
 <input type="file" multiple @change="fileChange">

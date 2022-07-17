@@ -16,14 +16,6 @@ const rules = {
         }
         return {}
     },
-    validnumber(val) {
-        if (!/^[0-9]*$/.test(val)) {
-            return {
-                type: 'validnumber',
-            }
-        }
-        return {}
-    },
     minlength(val, validateValue) {
         if (val.length < parseInt(validateValue)) {
             return {

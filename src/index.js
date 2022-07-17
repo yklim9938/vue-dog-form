@@ -11,8 +11,7 @@ const $dForm = {
         max: "Maximum value is {n}.",
         accept: "File(s) extension is not accepted.",
         maxfile: "Please select not more than {n} files.",
-        maxsize: "File(s) must less than {n}Mb.",
-        validnumber: "Input must be a number.",
+        maxsize: "File(s) must less than {n}Mb."
     },
     message(error) {
         return error.value?.n ? this.validationMessages[error.type].replace(/{n}/g, error.value.n) : this.validationMessages[error.type] || error.type

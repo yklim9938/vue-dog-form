@@ -4,8 +4,8 @@
 		<DForm @submit="submitHandler" novalidate ref="formRef">
 			<div>
 				<div>Name</div>
-				<input type="text" v-model="name"/>
-				<DError v-model="name" required :messages="customMessage" minlength="2" multipleof="3"/>
+				<input type="text" name="name" v-model="name"/>
+				<DError v-model="name" required :messages="customMessage" minlength="2" multipleof="3" target='[name="name"]' />
 			</div>
 			<div v-if="!noEmail">
 				<div>Email</div>
@@ -47,8 +47,9 @@ const name = ref('')
 const password = ref('')
 const confirmPassword = ref('')
 const cpErr = ref(null)
+
 watch(password, (newValue, oldValue) => {
-    if (newValue && confirmPassword) {
+    if (newValue && confirmPassword.value) {
         nextTick(() => { // wait for <DogError> to take up the new password
             cpErr.value.validate()
         })
@@ -68,9 +69,7 @@ const submitHandler = (e) => {
 
 const formRef = ref(null)
 const clearForm = (e) => {
-	// nextTick(() => { // wait for <DogError> to take up the new password
 		formRef.value.clearErrors()
-	// })
 }
 
 const noEmail = ref(false)
@@ -78,4 +77,11 @@ const noEmail = ref(false)
 </script>
 <style>
 @import "./assets/base.css";
+input {
+	outline: none;
+	border: 1px solid grey;
+}
+input.invalid {
+	border: 1px solid red;
+}
 </style>

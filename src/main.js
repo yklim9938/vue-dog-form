@@ -14,6 +14,7 @@ $dForm.customRules = {
                 }
             }
         }
+        return {}
     }
 }
 $dForm.validationMessages.multipleof = 'Value must be multiple of {n}'

@@ -11,6 +11,7 @@ export default {
     props: {
         modelValue: [String, Number, Object, Array],
         messages: Object,
+        target: String
     },
     data() {
         return {
@@ -21,6 +22,11 @@ export default {
     methods: {
         validate() {
             this.errorMsg = ''
+            let inputEls = []
+            if (this.target) {
+                inputEls = document.querySelectorAll(this.target)
+                inputEls.forEach(ie => ie.classList.remove('invalid'))
+            }
             if (this.modelValue != undefined && this.modelValue != null) {
                 if ((!('required' in this.$attrs) || (typeof this.$attrs.required == 'boolean' && !this.$attrs.required)) && (typeof this.value == 'string' || Array.isArray(this.value)) && this.modelValue.length < 1) return {}
                 let error = {}
@@ -46,12 +52,19 @@ export default {
                         }
                     }
                 }
+                if(error && error.type) {
+                    inputEls.forEach(ie => ie.classList.add('invalid'))
+                }
                 return error
             }
             return {}
         },
         clear() {
             this.errorMsg = ''
+            if (this.target) {
+                let inputEls = document.querySelectorAll(this.target)
+                inputEls.forEach(ie => ie.classList.remove('invalid'))
+            }
         }
     },
     mounted() {
