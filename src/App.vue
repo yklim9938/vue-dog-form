@@ -84,4 +84,7 @@ input {
 input.invalid {
 	border: 1px solid red;
 }
+input.valid {
+	border: 1px solid green;
+}
 </style>

@@ -25,7 +25,7 @@ export default {
             let inputEls = []
             if (this.target) {
                 inputEls = document.querySelectorAll(this.target)
-                inputEls.forEach(ie => ie.classList.remove('invalid'))
+                inputEls.forEach(ie => ie.classList.remove('invalid', 'valid'))
             }
             if (this.modelValue != undefined && this.modelValue != null) {
                 if ((!('required' in this.$attrs) || (typeof this.$attrs.required == 'boolean' && !this.$attrs.required)) && (typeof this.value == 'string' || Array.isArray(this.value)) && this.modelValue.length < 1) return {}
@@ -55,6 +55,9 @@ export default {
                 if(error && error.type) {
                     inputEls.forEach(ie => ie.classList.add('invalid'))
                 }
+                else if (!error.type && this.target) {
+                    inputEls.forEach(ie => ie.classList.add('valid'))
+                }
                 return error
             }
             return {}
@@ -63,7 +66,7 @@ export default {
             this.errorMsg = ''
             if (this.target) {
                 let inputEls = document.querySelectorAll(this.target)
-                inputEls.forEach(ie => ie.classList.remove('invalid'))
+                inputEls.forEach(ie => ie.classList.remove('invalid', 'valid'))
             }
         }
     },

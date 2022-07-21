@@ -101,9 +101,9 @@ const customMessage = {
 </script>
 ```
 
-## Adding Invalid Class to Inputs
+## Adding Class to Inputs
 
-Use the `target` prop on `<DError>` as css selector to select elements. Selected elements will have `.invalid` class added when the input is invalid.
+Use the `target` prop on `<DError>` as css selector to select elements. Selected elements will have `.invalid` class added when the input is invalid, `.valid` when valid.
 ```
 <input type="email" id="emailInput" v-model="name"/>
 <DError v-model="name" required validemail target="#emailInput" />
