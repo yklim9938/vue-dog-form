@@ -54,6 +54,7 @@ export default {
                 }
                 if(error && error.type) {
                     inputEls.forEach(ie => ie.classList.add('invalid'))
+                    error.els = inputEls
                 }
                 else if (!error.type && this.target) {
                     inputEls.forEach(ie => ie.classList.add('valid'))
@@ -84,6 +85,11 @@ export default {
     watch: {
         modelValue() {
             this.validate()
+        },
+        '$attrs.equalto'(n, o) {
+            if (n && this.modelValue) {
+                this.validate()
+            }
         }
     }
 }

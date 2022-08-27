@@ -9,7 +9,9 @@ export default {
     inheritAttrs: false,
     name: 'DForm',
     props: {
-        novalidate: Boolean
+        novalidate: Boolean,
+        focusError: Boolean,
+        focusOffset: Number
     },
     data() {
         return {
@@ -29,12 +31,26 @@ export default {
 		},
         dogSubmit(e) {
             let errorCount = 0
+            let errorInput = null
             this.dogErrors.forEach(v => {
                 let validity = v.validate()
-                if (validity.type) errorCount++
+                if (validity.type) {
+                    errorCount++
+                    if (!errorInput && validity.els && validity.els.length > 0) {
+                        errorInput = validity.els[0]
+                    }
+                }
             })
 
             e.isValid = errorCount < 1
+            if (this.focusError && errorInput) {
+                const elPos = errorInput.getBoundingClientRect().top;
+                const offset = this.focusOffset || 0
+                window.scrollTo({
+                    top: elPos + window.pageYOffset - offset,
+                    behavior: "smooth"
+                });
+            }
             this.$emit('submit', e)
         }
     }

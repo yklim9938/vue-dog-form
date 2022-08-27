@@ -1,7 +1,7 @@
 
 <template>
 	<div>
-		<DForm @submit="submitHandler" novalidate ref="formRef">
+		<DForm @submit="submitHandler" novalidate ref="formRef" focus-error :focus-offset="40">
 			<div>
 				<div>Name</div>
 				<input type="text" name="name" v-model="name"/>
@@ -39,14 +39,14 @@
 </template>
 
 <script setup>
-import { nextTick, ref, watch } from 'vue'
+import { ref } from 'vue'
 const customMessage = {
 	required: 'Name is required',
 }
 const name = ref('')
 const password = ref('')
 const confirmPassword = ref('')
-const cpErr = ref(null)
+/* const cpErr = ref(null)
 
 watch(password, (newValue, oldValue) => {
     if (newValue && confirmPassword.value) {
@@ -54,7 +54,7 @@ watch(password, (newValue, oldValue) => {
             cpErr.value.validate()
         })
     }
-})
+}) */
 const email = ref('')
 const file = ref('')
 const fileChange = (e) => {

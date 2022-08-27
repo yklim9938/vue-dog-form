@@ -255,23 +255,8 @@ $dForm.validationMessages.multipleof = 'Value must be multiple of {n}'
 <div>
     <label>Confirm Password</label>
     <input type="password" v-model="confirmPassword" />
-    <DError v-model="confirmPassword" :equalto="password" ref="cpErr"/>
+    <DError v-model="confirmPassword" :equalto="password" />
 </div>
-
-<script setup>
-import { ref, watch } from 'vue'
-
-const password = ref('')
-const confirmPassword = ref('')
-const cpErr = ref(null)
-watch(password, (newValue, oldValue) => {
-    if (newValue && confirmPassword.value) {
-        nextTick(() => { // wait for <DError> to take up the new password
-            cpErr.value.validate()
-        })
-    }
-})
-</script>
 ```
 
 ### File Input Validations
@@ -298,6 +283,29 @@ Simply add a ```novalidate``` attribute on ```DForm```
 <!-- Your inputs -->
 </DForm>
 ```
+
+### Scroll to invalid input
+
+By adding `focus-error` prop on `<DForm>`, invalid inputs can be automatically scrolled into view upon form submission.
+
+```
+<DForm @submit="handleSubmit" focus-error>
+    <input type="text" v-model="name" id="nameInput" />
+    <DError v-model="name" required target="#nameInput" />
+</DForm>
+```
+
+*It's actually scrolling to the element specified by `target` in `<DError>`. Therefore `target` is needed for this work.
+
+**Offsetting scroll**
+
+We can offset the scroll position by using `focus-offset`. This is useful if you have a floating header that covers the input after scrolling.
+
+```
+<DForm @submit="handleSubmit" focus-error :focus-offset="90">
+```
+
+This will offset the scroll position by 90px.
 
 ---
 
