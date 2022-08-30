@@ -4,7 +4,7 @@ Simplest yet flexible form validation plugin for Vue 3.
 
 ✔ No more validation schema object, use native html-like validation attributes.
 
-✔ Works with custom component inputs.
+✔ Works with custom input components.
 
 ✔ Support custom validation rules and messages. 
 
