@@ -2,9 +2,10 @@
 
 Simplest yet flexible form validation plugin for Vue 3.
 
-✔ Works with custom component inputs
-✔ Custom validations 
-✔ Lightweight
+✔ No more validation schema object, use native html-like validation attributes.
+✔ Works with custom component inputs.
+✔ Support custom validation rules and messages. 
+✔ Lightweight, less than 3kb gzipped.
 
 ## Installation
 
@@ -18,13 +19,10 @@ In main.js
 ```
 import { createApp } from 'vue'
 import App from './App.vue'
-import {DForm, DError, $dForm} from 'vue-dog-form'
+import dogForm from 'vue-dog-form'
 
 const app = createApp(App)
-app.component('DForm', DForm)
-app.component('DError', DError)
-app.config.globalProperties.$dForm = $dForm // mandatory
-
+app.use(dogForm)
 app.mount('#app')
 ```
 
@@ -32,17 +30,10 @@ app.mount('#app')
 
 Create a plugin ```plugins/DogForm.js``` with the following content:
 ```
-import {DForm, DError, $dForm} from 'vue-dog-form'
+import dogForm from 'vue-dog-form'
 
 export default defineNuxtPlugin(nuxtApp => {
-    nuxtApp.vueApp.component('DForm', DForm)
-    nuxtApp.vueApp.component('DError', DError)
- 
-    return {
-        provide: {
-            dForm: $dForm
-        }
-    }
+    nuxtApp.vueApp.use(dogForm)
 })
 ```
 
@@ -131,56 +122,36 @@ const clearForm = (e) => {
 ```
 ## Configurations
 
-You can change configuration of DogForm in ```$dForm``` after importing.
+You can change configuration of DogForm by passing `options` on `app.use()` in main.js.
 
 ```
-import {DForm, DError, $dForm} from 'vue-dog-form'
-// $dForm holds all the configuration
-```
-
-### Default structure of ```$dForm```:
-```
-{
-    validationMessages: { // Default validation messages
-        required: "This field is required.",
-        minlength: "Input must be at least {n} characters.",
-        maxlength: "Input cannot be more than {n} characters.",
-        equalto: "Input does not match.",
-        validemail: "Please enter a valid email.",
-        min: "Minimum value is {n}.",
-        max: "Maximum value is {n}.",
-        accept: "File(s) extension is not accepted.",
-        maxfile: "Please select not more than {n} files.",
-        maxsize: "File(s) must less than {n}Mb."
-    },
-    message(error) {
-        // generate validation message based on the error type
-        return error.value?.n ? this.validationMessages[error.type].replace(/{n}/g, error.value.n) : this.validationMessages[error.type] || error.type
-    }
-}
+app.use(dogForm, options)
 ```
 
 ## Configuration Examples
 
 ### Changing default validation message globally
+You can overwrite default validation message within the `defaultMessages` property in `options`.
 
-E.g. Change the default validation message for *required* validation
+E.g. Overwriting *required* validation message.
 ```
-$dForm.validationMessages.required = 'Please fill in.'
+app.use(dogForm, {
+    defaultMessages: {
+        required: `Don't be lazy.`
+    }
+})'
 ```
-
-Alternatively, you can overwrite the whole ```validationMessage``` with your own set of messages.
 
 ### Translating validation message
+Pass in a `message(error)` function that returns the corresponding validation message.
 
-#### Using vue-i18n
-in main.js
+E.g. Using vue-i18n, in main.js
 
 ```
 import { createApp } from 'vue'
 import App from './App.vue'
-import {DForm, DError, $dForm} from 'vue-dog-form'
 import { createI18n } from 'vue-i18n'
+import dogForm from 'vue-dog-form'
 
 const messages = {
     cn: {
@@ -204,20 +175,20 @@ const i18n = createI18n({
 })
 app.use(i18n)
 
-$dForm.message = (error) => {
-    const translateKey = `error_${error.type}`
-    return error.value?.n ? i18n.global.t(translateKey, {n : error.value.n}) : i18n.global.t(translateKey)    
-}
-
-app.component('DForm', DForm)
-app.component('DError', DError)
-app.config.globalProperties.$dForm = $dForm
+app.use(dogForm, {
+    message(error) {
+        const translateKey = `error_${error.type}`
+        return error.value?.n ? i18n.global.t(translateKey, {n : error.value.n}) : i18n.global.t(translateKey)    
+    }
+})
 
 app.mount('#app')
 ```
 
-### Add custom validation rules
-E.g. Add a custom attribute that checks whether input value is multiple of 3.
+### Adding custom validation rules
+You can add in custom validations with the `customRules` property.
+
+E.g. Add a custom attribute that checks whether input value is a multiple of 3.
 
 ```
 <input type="number" v-model="answer">
@@ -225,26 +196,28 @@ E.g. Add a custom attribute that checks whether input value is multiple of 3.
 ```
 
 ```
-$dForm.customRules = {
-    multipleof(val, validateValue) {
-        // val is your input's value,
-        // validateValue is the value you passed in the attribute, in this case, 3
-        if (Number(val) % validateValue != 0) { // condition for invalid value
-        // must return an object with 'type' key
-            return {
-                type: 'multipleof',
-                value: {
-                    n: validateValue
+app.use(dogForm, {
+    customRules: {
+        multipleof: {
+            rule(val, validateValue) {
+            // val is your input's value,
+            // validateValue is the value you passed in the attribute, in this case, 3
+                if (Number(val) % validateValue != 0) { // condition for invalid value
+                // must return an object with 'type' key
+                    return {
+                        type: 'multipleof',
+                        value: {
+                            n: validateValue
+                        }
+                    }
                 }
-            }
+                return {}
+            },
+            message: 'Value must be multiple of {n}'
         }
-        return {} // return empty object if there's no error
     }
-}
-
-$dForm.validationMessages.multipleof = 'Value must be multiple of {n}'
+})
 ```
-
 **Note** *validation attributes must be small caps
 
 ## Usage Examples
@@ -273,7 +246,7 @@ $dForm.validationMessages.multipleof = 'Value must be multiple of {n}'
 const file = ref('')
 
 const fileChange = (e) => {
-    file.value=e.target.files
+    file.value = e.target.files
 }
 </script>
 ```
@@ -313,4 +286,4 @@ This will offset the scroll position by 90px.
 
 ---
 
-Made by [yklim](https://www.buymeacoffee.com/yklim) 😊
+Made by [yklim](https://www.buymeacoffee.com/yklim) 😊  
