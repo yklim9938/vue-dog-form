@@ -2,6 +2,10 @@
 
 Simplest yet flexible form validation plugin for Vue 3.
 
+✔ Works with custom component inputs
+✔ Custom validations 
+✔ Lightweight
+
 ## Installation
 
 ```
@@ -121,7 +125,7 @@ You can call the `clearErros()` method on `<DForm>` to clear all errors.
 <script setup>
 const formRef = ref(null)
 const clearForm = (e) => {
-	formRef.value.clearErrors()
+    formRef.value.clearErrors()
 }
 </script>
 ```
