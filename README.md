@@ -6,7 +6,7 @@ Simplest yet flexible form validation plugin for Vue 3.
 
 ✔ Works with custom input components.
 
-✔ Support custom validation rules and messages. 
+✔ Supports custom validation rules and messages. 
 
 ✔ Lightweight, less than 3kb gzipped.
 
