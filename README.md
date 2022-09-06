@@ -165,7 +165,7 @@ app.use(dogForm, {
 
 ### defaultMessages
 
-Overwrites default validation messages. 
+Overwrites default validation messages globally.
 
 E.g. Overwriting **only** the required validation message.
 
@@ -262,7 +262,9 @@ app.use(dogForm, {
 ## Examples
 
 ### Custom validation message
+
 Use `messages` prop to show custom validation messages.
+
 ```
 <DError v-model="name" required minlength="2" :messages="customMessage" />
 
@@ -274,7 +276,7 @@ const customMessage = {
 </script>
 ```
 
-#### Adding class to inputs
+### Adding class to inputs
 
 Use the `target` prop on `<DError>` as css selector to select elements. Selected elements will have `.invalid` class added when the input is invalid, `.valid` when valid.
 ```
@@ -316,7 +318,7 @@ We can offset the scroll position by using `focus-offset`. This is useful if you
 
 This will offset the scroll position by 90px.
 
-#### Clearing Form Errors
+### Clearing Form Errors
 
 Calling the `clearErros()` method on `<DForm>` to clear all errors.
 ```
