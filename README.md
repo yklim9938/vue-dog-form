@@ -4,21 +4,28 @@ Simplest yet flexible form validation plugin for Vue 3.
 
 ✔ No more validation schema object, use native html-like validation attributes.
 
-✔ Works with custom input components.
+✔ Compatible with any custom input components.
 
-✔ Supports custom validation rules and messages. 
+✔ Support custom validation rules and messages. 
 
 ✔ Lightweight, less than 3kb gzipped.
 
-## Installation
+---
+
+## Getting Started
+
+### 1. Installation
 
 ```
-npm i vue-dog-form
+$ npm i vue-dog-form
 ```
 
-### Vue 3
+### 2. Import into your project as Vue Plugin
 
-In main.js
+#### Vue 3
+
+In `/src/main.js`
+
 ```
 import { createApp } from 'vue'
 import App from './App.vue'
@@ -29,9 +36,10 @@ app.use(dogForm)
 app.mount('#app')
 ```
 
-### Nuxt 3
+#### Nuxt 3
 
-Create a plugin ```plugins/DogForm.js``` with the following content:
+Create a `dogForm.js` file under `plugins` folder with the following content:
+
 ```
 import dogForm from 'vue-dog-form'
 
@@ -40,10 +48,14 @@ export default defineNuxtPlugin(nuxtApp => {
 })
 ```
 
-## Basic Usage
+Nuxt 3 will automatically use this plugin.
 
-1. Build your form as usual, but wrap it in a ```<DForm>``` component.
-2. Add `<DError>` with validation attributes. 
+---
+
+### Basic Usage
+
+1. Build your form as usual, but wrap it in a `<DForm>` component.
+2. Add `<DError>` with validation attributes.
 
 ```
 <DForm @submit="submitHandler">
@@ -73,7 +85,62 @@ const submitHandler = (e) => {
 
 **Note** *By default, error messages has no styling. You can style it with the ```._df_ErrMsg``` class.
 
-## Built-In Validations
+---
+
+### How It Works
+
+When the `v-model` in `<DError>` changes, the value will be validated with attributes in `<DError>`. If the value is invalid, `<DError>` will render the corresponding validation message.
+
+During form submission, `<DForm>` will pick up the event and trigger all nested `<DError>` to run validation again.
+
+The `isValid` property in the submit event will tell us whether the form is valid.
+
+---
+
+## Components
+
+### <DError>
+
+#### Props
+
+| Name | Info | Type |
+| -- | -- | -- |
+| v-model | *Required. The value of your input. | string, number, object or array | 
+| messages | Custom validation messages. See [Example](#Custom-validation-message). | object |
+| target | The css selector to select associated html elements. See [Example](#Adding-class-to-inputs). | string |
+
+#### Methods
+
+##### validate()
+
+Validates the input. If the value is invalid, an error message will be shown. If `target` prop is provided, matched elements will have .invalid or .valid class.
+
+##### clear()
+Clears the error message. Also removes .invalid and .valid class from matched target.
+
+---
+
+### <DForm>
+
+#### Props
+
+| Name | Info | Type |
+| -- | -- | -- |
+| novalidate | Remove browser's default validation message | Boolean |
+| focus-error | Auto scroll to invalid input upon form submission. See [Example](#Scroll-to-invalid-input) | Boolean |
+| focus-offset | The offset position for auto scroll. See [Example](#Offsetting-scroll). | Number |
+
+#### Methods
+
+##### clearErrors()
+
+Removes all error messages by calling the clear() method on every <DError>.
+
+---
+
+## Built-in Validations
+
+Vue Dog Form provides some built-in validations which are similar to native html validation attributes:
 
 - ```required```
 - ```minlength="3"```
@@ -86,57 +153,22 @@ const submitHandler = (e) => {
 - ```validemail``` (input value must be an email)
 - ```:equalto="otherState"``` (input value must equal to the value of *otherState*, useful for confirming password) [Example](#Password-And-Confirm-Password)
 
-## Custom validation message
-Use `messages` prop to show custom validation messages.
-```
-<DError v-model="name" required minlength="2" :messages="customMessage" />
-
-<script setup>
-const customMessage = {
-    required: 'Name is required',
-}
-// since minlength is not specified in 'customMessage', it will use the default validation message
-</script>
-```
-
-## Adding Class to Inputs
-
-Use the `target` prop on `<DError>` as css selector to select elements. Selected elements will have `.invalid` class added when the input is invalid, `.valid` when valid.
-```
-<input type="email" id="emailInput" v-model="name"/>
-<DError v-model="name" required validemail target="#emailInput" />
-```
-
-## Clearing Form Errors
-
-You can call the `clearErros()` method on `<DForm>` to clear all errors.
-```
-<DForm ref="formRef">
-    <!-- ...your inputs -->
-    <button type="reset" @click="clearForm">Reset</button>
-</DForm>
-
-<script setup>
-const formRef = ref(null)
-const clearForm = (e) => {
-    formRef.value.clearErrors()
-}
-</script>
-```
 ## Configurations
 
-You can change configuration of DogForm by passing `options` on `app.use()` in main.js.
+You can modify DogForm's behavior with `app.use()`.
 
 ```
-app.use(dogForm, options)
+app.use(dogForm, {
+    ... parameters
+})
 ```
 
-## Configuration Examples
+### defaultMessages
 
-### Changing default validation message globally
-You can overwrite default validation message within the `defaultMessages` property in `options`.
+Overwrites default validation messages. 
 
-E.g. Overwriting *required* validation message.
+E.g. Overwriting **only** the required validation message.
+
 ```
 app.use(dogForm, {
     defaultMessages: {
@@ -145,17 +177,22 @@ app.use(dogForm, {
 })'
 ```
 
-### Translating validation message
-Pass in a `message(error)` function that returns the corresponding validation message.
+### message(error)
 
-E.g. Using vue-i18n, in main.js
+The function to generate validation message. The `error` object has the following parameters:
+
+| Parameters | Info |Type | Examples
+| -- | -- | -- | -- |
+| type | The failed validation type. | string | "required", "minlength"
+| value | The expected valid value. | object | {n: 3} *when minlength="3" |
+
+By default, Vue Dog Form will read the `type` and `value.n` to generate validation message.
+
+E.g. Translating messages with vue-i18n:
+
+In main.js
 
 ```
-import { createApp } from 'vue'
-import App from './App.vue'
-import { createI18n } from 'vue-i18n'
-import dogForm from 'vue-dog-form'
-
 const messages = {
     cn: {
         error_required: "这是必填栏。",
@@ -176,7 +213,6 @@ const i18n = createI18n({
     fallbackLocale: 'cn', // set fallback locale
     messages
 })
-app.use(i18n)
 
 app.use(dogForm, {
     message(error) {
@@ -184,12 +220,11 @@ app.use(dogForm, {
         return error.value?.n ? i18n.global.t(translateKey, {n : error.value.n}) : i18n.global.t(translateKey)    
     }
 })
-
-app.mount('#app')
 ```
 
-### Adding custom validation rules
-You can add in custom validations with the `customRules` property.
+### customRules
+
+Adds custom validation rules.
 
 E.g. Add a custom attribute that checks whether input value is a multiple of 3.
 
@@ -221,22 +256,81 @@ app.use(dogForm, {
     }
 })
 ```
+
 **Note** *validation attributes must be small caps
 
-## Usage Examples
+## Examples
 
-### Password And Confirm Password
+### Custom validation message
+Use `messages` prop to show custom validation messages.
+```
+<DError v-model="name" required minlength="2" :messages="customMessage" />
+
+<script setup>
+const customMessage = {
+    required: 'Name is required',
+}
+// since minlength is not specified in 'customMessage', it will use the default validation message
+</script>
+```
+
+#### Adding class to inputs
+
+Use the `target` prop on `<DError>` as css selector to select elements. Selected elements will have `.invalid` class added when the input is invalid, `.valid` when valid.
+```
+<input type="email" id="emailInput" v-model="name"/>
+<DError v-model="name" required validemail target="#emailInput" />
+```
+
+
+### Remove browser's default validation
+
+Simply add a ```novalidate``` attribute on ```<DForm>```
 
 ```
-<div>
-    <label>Password</label>
-    <input type="password" v-model="password">
-</div>
-<div>
-    <label>Confirm Password</label>
-    <input type="password" v-model="confirmPassword" />
-    <DError v-model="confirmPassword" :equalto="password" />
-</div>
+<DForm @submit="submitHandler" novalidate>
+<!-- Your inputs -->
+</DForm>
+```
+
+### Scroll to invalid input
+
+By adding `focus-error` prop on `<DForm>`, invalid inputs can be automatically scrolled into view upon form submission. This is useful when you have a long form.
+
+```
+<DForm @submit="handleSubmit" focus-error>
+    <input type="text" v-model="name" id="nameInput" />
+    <DError v-model="name" required target="#nameInput" />
+</DForm>
+```
+
+*It's actually scrolling to the element specified by `target` in `<DError>`. Therefore the `target` prop is needed for this to work.
+
+#### Offsetting scroll
+
+We can offset the scroll position by using `focus-offset`. This is useful if you have a floating header that covers the input after scrolling.
+
+```
+<DForm @submit="handleSubmit" focus-error :focus-offset="90">
+```
+
+This will offset the scroll position by 90px.
+
+#### Clearing Form Errors
+
+Calling the `clearErros()` method on `<DForm>` to clear all errors.
+```
+<DForm ref="formRef">
+    <!-- ...your inputs -->
+    <button type="reset" @click="clearForm">Reset</button>
+</DForm>
+
+<script setup>
+const formRef = ref(null)
+const clearForm = (e) => {
+    formRef.value.clearErrors()
+}
+</script>
 ```
 
 ### File Input Validations
@@ -254,38 +348,19 @@ const fileChange = (e) => {
 </script>
 ```
 
-### Remove browser's default validation
-
-Simply add a ```novalidate``` attribute on ```DForm```
+### Password And Confirm Password
 
 ```
-<DForm @submit="submitHandler" novalidate>
-<!-- Your inputs -->
-</DForm>
+<div>
+    <label>Password</label>
+    <input type="password" v-model="password">
+</div>
+<div>
+    <label>Confirm Password</label>
+    <input type="password" v-model="confirmPassword" />
+    <DError v-model="confirmPassword" :equalto="password" />
+</div>
 ```
-
-### Scroll to invalid input
-
-By adding `focus-error` prop on `<DForm>`, invalid inputs can be automatically scrolled into view upon form submission.
-
-```
-<DForm @submit="handleSubmit" focus-error>
-    <input type="text" v-model="name" id="nameInput" />
-    <DError v-model="name" required target="#nameInput" />
-</DForm>
-```
-
-*It's actually scrolling to the element specified by `target` in `<DError>`. Therefore `target` is needed for this work.
-
-**Offsetting scroll**
-
-We can offset the scroll position by using `focus-offset`. This is useful if you have a floating header that covers the input after scrolling.
-
-```
-<DForm @submit="handleSubmit" focus-error :focus-offset="90">
-```
-
-This will offset the scroll position by 90px.
 
 ---
 
