@@ -99,7 +99,7 @@ The `isValid` property in the submit event will tell us whether the form is vali
 
 ## Components
 
-### <DError>
+### `<DError>`
 
 #### Props
 
@@ -120,7 +120,7 @@ Clears the error message. Also removes .invalid and .valid class from matched ta
 
 ---
 
-### <DForm>
+### `<DForm>`
 
 #### Props
 
