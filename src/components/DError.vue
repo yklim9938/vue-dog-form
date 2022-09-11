@@ -90,6 +90,11 @@ export default {
             if (n && this.modelValue) {
                 this.validate()
             }
+        },
+        '$attrs.notequalto'(n, o) {
+            if (n && this.modelValue) {
+                this.validate()
+            }
         }
     }
 }

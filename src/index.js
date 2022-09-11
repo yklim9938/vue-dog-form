@@ -12,6 +12,7 @@ const dogForm = {
                 minlength: "Input must be at least {n} characters.",
                 maxlength: "Input cannot be more than {n} characters.",
                 equalto: "Input value does not match.",
+                notequalto: "Input value cannot be the same.",
                 validemail: "Please enter a valid email.",
                 min: "Minimum value is {n}.",
                 max: "Maximum value is {n}.",

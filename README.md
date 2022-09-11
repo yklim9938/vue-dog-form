@@ -151,7 +151,8 @@ Vue Dog Form provides some built-in validations which are similar to native html
 - ```maxfile="2"``` (set the maximum number of files allowed in file input)  [Example](#File-Input-Validations)
 - ```maxsize="5242880"``` *5Mb* (set the maximum file size **bytes** allowed in file input)
 - ```validemail``` (input value must be an email)
-- ```:equalto="otherState"``` (input value must equal to the value of *otherState*, useful for confirming password) [Example](#Password-And-Confirm-Password)
+- ```:equalto="otherState"``` (input value must be the same as *otherState*, useful for confirming password) [Example](#Password-And-Confirm-Password)
+- ```:notequalto="otherState"``` (input value cannot be the same as *otherState*)
 
 ## Configurations
 
