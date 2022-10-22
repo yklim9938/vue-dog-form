@@ -26,7 +26,7 @@ $ npm i vue-dog-form
 
 In `/src/main.js`
 
-```
+```js
 import { createApp } from 'vue'
 import App from './App.vue'
 import dogForm from 'vue-dog-form'
@@ -40,7 +40,7 @@ app.mount('#app')
 
 Create a `dogForm.js` file under `plugins` folder with the following content:
 
-```
+```js
 import dogForm from 'vue-dog-form'
 
 export default defineNuxtPlugin(nuxtApp => {
@@ -57,7 +57,7 @@ Nuxt 3 will automatically use this plugin.
 1. Build your form as usual, but wrap it in a `<DForm>` component.
 2. Add `<DError>` with validation attributes.
 
-```
+```js
 <DForm @submit="submitHandler">
     <div>
         <label>Name</label>
@@ -158,7 +158,7 @@ Vue Dog Form provides some built-in validations which are similar to native html
 
 You can modify DogForm's behavior with `app.use()`.
 
-```
+```js
 app.use(dogForm, {
     ... parameters
 })
@@ -170,7 +170,7 @@ Overwrites default validation messages globally.
 
 E.g. Overwriting **only** the required validation message.
 
-```
+```js
 app.use(dogForm, {
     defaultMessages: {
         required: `Don't be lazy.`
@@ -193,7 +193,7 @@ E.g. Translating messages with vue-i18n:
 
 In main.js
 
-```
+```js
 const messages = {
     cn: {
         error_required: "这是必填栏。",
@@ -229,12 +229,12 @@ Adds custom validation rules.
 
 E.g. Add a custom attribute that checks whether input value is a multiple of 3.
 
-```
+```js
 <input type="number" v-model="answer">
 <DError v-model="answer" multiple="3" />
 ```
 
-```
+```js
 app.use(dogForm, {
     customRules: {
         multipleof: {
@@ -266,7 +266,7 @@ app.use(dogForm, {
 
 Use `messages` prop to show custom validation messages.
 
-```
+```js
 <DError v-model="name" required minlength="2" :messages="customMessage" />
 
 <script setup>
@@ -280,7 +280,7 @@ const customMessage = {
 ### Adding class to inputs
 
 Use the `target` prop on `<DError>` as css selector to select elements. Selected elements will have `.invalid` class added when the input is invalid, `.valid` when valid.
-```
+```js
 <input type="email" id="emailInput" v-model="name"/>
 <DError v-model="name" required validemail target="#emailInput" />
 ```
@@ -290,7 +290,7 @@ Use the `target` prop on `<DError>` as css selector to select elements. Selected
 
 Simply add a ```novalidate``` attribute on ```<DForm>```
 
-```
+```js
 <DForm @submit="submitHandler" novalidate>
 <!-- Your inputs -->
 </DForm>
@@ -300,7 +300,7 @@ Simply add a ```novalidate``` attribute on ```<DForm>```
 
 By adding `focus-error` prop on `<DForm>`, invalid inputs can be automatically scrolled into view upon form submission. This is useful when you have a long form.
 
-```
+```js
 <DForm @submit="handleSubmit" focus-error>
     <input type="text" v-model="name" id="nameInput" />
     <DError v-model="name" required target="#nameInput" />
@@ -313,7 +313,7 @@ By adding `focus-error` prop on `<DForm>`, invalid inputs can be automatically s
 
 We can offset the scroll position by using `focus-offset`. This is useful if you have a floating header that covers the input after scrolling.
 
-```
+```js
 <DForm @submit="handleSubmit" focus-error :focus-offset="90">
 ```
 
@@ -322,7 +322,7 @@ This will offset the scroll position by 90px.
 ### Clearing Form Errors
 
 Calling the `clearErros()` method on `<DForm>` to clear all errors.
-```
+```js
 <DForm ref="formRef">
     <!-- ...your inputs -->
     <button type="reset" @click="clearForm">Reset</button>
@@ -338,7 +338,7 @@ const clearForm = (e) => {
 
 ### File Input Validations
 
-```
+```js
 <input type="file" multiple @change="fileChange">
 <DError v-model="file"  maxsize="2097152" maxfile="2" required />
 
@@ -353,7 +353,7 @@ const fileChange = (e) => {
 
 ### Password And Confirm Password
 
-```
+```js
 <div>
     <label>Password</label>
     <input type="password" v-model="password">
