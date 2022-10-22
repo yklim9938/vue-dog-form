@@ -5,7 +5,7 @@
 			<div>
 				<div>Name</div>
 				<input type="text" name="name" v-model="name"/>
-				<DError v-model="name" required :messages="customMessage" minlength="2" multipleof="3" target='[name="name"]' />
+				<DError v-model="name" :messages="customMessage" minlength="2" multipleof="3" target='[name="name"]' />
 			</div>
 			<div v-if="!noEmail">
 				<div>Email</div>
@@ -21,6 +21,11 @@
 				<div>Confirm Password</div>
 				<input type="password" v-model="confirmPassword" />
 				<DError v-model="confirmPassword" :equalto="password" maxlength="32" ref="cpErr" />
+			</div>
+			<div>
+				<div>Quantity</div>
+				<input type="number" v-model="qty">
+				<DError v-model="qty" max="0" />
 			</div>
 			<div>
 				<div>File</div>
@@ -56,6 +61,9 @@ watch(password, (newValue, oldValue) => {
     }
 }) */
 const email = ref('')
+
+const qty = ref(0)
+
 const file = ref('')
 const fileChange = (e) => {
 	console.log(e)
