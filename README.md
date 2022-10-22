@@ -89,7 +89,7 @@ const submitHandler = (e) => {
 
 ### How It Works
 
-When the `v-model` in `<DError>` changes, the value will be validated with attributes in `<DError>`. If the value is invalid, `<DError>` will render the corresponding validation message.
+When the `v-model` in `<DError>` changes, the value will be validated with it's attributes. If the value is invalid, `<DError>` will render the corresponding validation message.
 
 During form submission, `<DForm>` will pick up the event and trigger all nested `<DError>` to run validation again.
 
@@ -99,7 +99,7 @@ The `isValid` property in the submit event will tell us whether the form is vali
 
 ## Components
 
-### `<DError>`
+### <DError>
 
 #### Props
 
@@ -120,7 +120,7 @@ Clears the error message. Also removes .invalid and .valid class from matched ta
 
 ---
 
-### `<DForm>`
+### <DForm>
 
 #### Props
 
