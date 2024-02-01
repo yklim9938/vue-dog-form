@@ -48,7 +48,6 @@ export default defineNuxtPlugin(nuxtApp => {
 })
 ```
 
-Nuxt 3 will automatically use this plugin.
 
 ---
 
