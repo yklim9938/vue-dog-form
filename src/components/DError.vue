@@ -31,12 +31,12 @@ onMounted(() => {
     errorInstances.push({
         id: instanceId,
         validate,
-        clearError
+        clear
     })
 })
 
 onBeforeUnmount(() => {
-    clearError() // make sure added classes are removed
+    clear() // make sure added classes are removed
     const targetIndex = errorInstances.findIndex(d => d.id == instanceId)
     errorInstances.splice(targetIndex, 1)
 })
@@ -115,7 +115,7 @@ const validate = () => {
     return error
 }
 
-const clearError = () => {
+const clear = () => {
     errorMsg.value = ''
     if (props.target) {
         let inputEls = document.querySelectorAll(props.target)
@@ -137,5 +137,11 @@ watch(() => attrs.notequalto, (newVal) => {
     if (newVal && props.modelValue) {
         validate()
     } 
+})
+
+defineExpose({
+    errorMsg,
+    validate,
+    clear
 })
 </script>

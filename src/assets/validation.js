@@ -1,6 +1,11 @@
 const rules = {
     required(val, validateValue) {
-        if (Array.isArray(val) || typeof val == 'string' || (val != null && typeof val == 'object')) {
+        if (val == null || val == undefined) {
+            return {
+                type: 'required'
+            }
+        }
+        else if (Array.isArray(val) || typeof val == 'string') {
             if (val.length < 1) {
                 return {
                     type: 'required'

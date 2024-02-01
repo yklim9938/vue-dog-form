@@ -34,7 +34,7 @@ provide('errorInstances', errorInstances)
 /** Removes the error message in all DError instances and .invalid class from their targets */
 const clearErrors = () => {
     errorInstances.forEach((v) => {
-        v.clearError();
+        v.clear();
     })
 }
 defineExpose({

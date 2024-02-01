@@ -99,7 +99,7 @@ The `isValid` property in the submit event will tell us whether the form is vali
 
 ## Components
 
-### <DError>
+### DError
 
 #### Props
 
@@ -120,7 +120,7 @@ Clears the error message. Also removes .invalid and .valid class from matched ta
 
 ---
 
-### <DForm>
+### DForm
 
 #### Props
 
@@ -321,7 +321,7 @@ This will offset the scroll position by 90px.
 
 ### Clearing Form Errors
 
-Calling the `clearErros()` method on `<DForm>` to clear all errors.
+Calling the `clearErrors()` method on `<DForm>` to clear all errors.
 ```
 <DForm ref="formRef">
     <!-- ...your inputs -->
@@ -367,4 +367,4 @@ const fileChange = (e) => {
 
 ---
 
-Made by [yklim](https://www.buymeacoffee.com/yklim) 😊  
+Made by [yklim](https://github.com/yklim9938) 😊  
