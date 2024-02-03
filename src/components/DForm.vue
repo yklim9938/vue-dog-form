@@ -1,5 +1,5 @@
 <template>
-  <form ref="formEl" @submit.prevent="dogSubmit" class="_dog-form" :novalidate="novalidate">
+  <form @submit.prevent="dogSubmit" class="_dog-form" :novalidate="novalidate">
     <slot></slot>
   </form>
 </template>
@@ -29,8 +29,6 @@ const props = defineProps({
     }
 })
 
-const formEl = ref()
-
 /** Contains all the DError instances when they are mounted.  */
 let errorInstances = []
 provide('errorInstances', errorInstances)
@@ -43,8 +41,7 @@ const clearErrors = () => {
 }
 
 defineExpose({
-    clearErrors,
-    formEl: formEl.value
+    clearErrors
 })
 
 /** Indicate whether validate function should run */
