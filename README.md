@@ -128,6 +128,7 @@ Clears the error message. Also removes .invalid and .valid class from matched ta
 | novalidate | Remove browser's default validation message | Boolean |
 | focus-error | Auto scroll to invalid input upon form submission. See [Example](#Scroll-to-invalid-input) | Boolean |
 | focus-offset | The offset position for auto scroll. See [Example](#Offsetting-scroll). | Number |
+| activate | Specify when should the validation happen. See [Example](#When-to-validate) | String / Boolean
 
 #### Methods
 
@@ -318,6 +319,21 @@ We can offset the scroll position by using `focus-offset`. This is useful if you
 
 This will offset the scroll position by 90px.
 
+#### When to validate
+
+The `activate` props controls the validation behaviour. The value could be
+ 
+ - "always" - Validate everytime the v-model changes. (default)
+ - "first_submit" - Only start to validate on the first form submission, and then behave like "always".
+ - "only_submit" - Only validate during form submissions.
+ - "never" - Disable validation. `e.isValid` from the submit event will always be `true`
+ - true - Same as "always"
+ - false - Same as "never"
+ 
+```
+<DForm activate="first_submit">
+```
+
 ### Clearing Form Errors
 
 Calling the `clearErrors()` method on `<DForm>` to clear all errors.
@@ -366,4 +382,4 @@ const fileChange = (e) => {
 
 ---
 
-Made by [yklim](https://github.com/yklim9938) 😊  
+Made by [yklim](https://github.com/yklim9938) 😊
