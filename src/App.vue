@@ -1,11 +1,11 @@
 
 <template>
 	<div>
-		<DForm @submit="submitHandler" novalidate ref="formRef" focus-error :focus-offset="40">
+		<DForm @submit="submitHandler" novalidate ref="formRef" focus-error :focus-offset="40" activate="always">
 			<div>
 				<div>Name</div>
 				<input type="text" name="name" v-model="name"/>
-				<DError v-model="name" :messages="customMessage" minlength="2" multipleof="3" target='[name="name"]' />
+				<DError v-model.trim="name" :messages="customMessage" minlength="2" multipleof="3" target='[name="name"]' />
 			</div>
 			<div v-if="!noEmail">
 				<div>Email</div>
@@ -20,12 +20,15 @@
 			<div>
 				<div>Confirm Password</div>
 				<input type="password" v-model="confirmPassword" />
-				<DError v-model="confirmPassword" :equalto="password" maxlength="32" ref="cpErr" />
+				<DError v-model="confirmPassword" :equalto="password" maxlength="32" />
 			</div>
 			<div>
 				<div>Quantity</div>
 				<input type="number" v-model="qty">
-				<DError v-model="qty" max="3" />
+				<DError v-model="qty" required max="3" ref="numErrRef" />
+				<div>
+					<button type="button" @click="numErrRef.validate()">Validate Number</button>
+				</div>
 			</div>
 			<div>
 				<div>File</div>
@@ -69,7 +72,7 @@ const password = ref('')
 const confirmPassword = ref('')
 const email = ref('')
 
-const qty = ref(0)
+const qty = ref()
 
 const file = ref('')
 const fileChange = (e) => {
@@ -92,6 +95,8 @@ const noEmail = ref(false)
 const selectVal = ref()
 
 const checkboxValue = ref([])
+
+const numErrRef = ref()
 </script>
 <style>
 @import "./assets/base.css";

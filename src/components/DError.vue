@@ -22,7 +22,7 @@ const props = defineProps({
 /** Unique ID of this instance */
 const instanceId = Math.random().toString()
 
-/** Provided from DForm to hold all error instances. 
+/** Provided by DForm to hold all error instances. 
  * @type {Array}
 */
 const errorInstances = inject('errorInstances')
@@ -70,7 +70,13 @@ const isRequired = () => {
     return true
 }
 
+/** Provided by DForm, indicate whether validate function should run */
+const isActive = inject('isActive')
+
 const validate = () => {
+    if (!isActive.value) {
+        return
+    }
     errorMsg.value = ''
     let inputEls = []
     if (props.target) {

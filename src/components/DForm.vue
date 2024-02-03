@@ -5,7 +5,7 @@
 </template>
 
 <script setup>
-import { provide, ref } from 'vue'
+import { provide, ref, onBeforeMount, watch } from 'vue'
 defineOptions({
     inheritAttrs: false
 })
@@ -22,6 +22,10 @@ const props = defineProps({
     focusOffset: {
         type: Number,
         default: 0
+    },
+    activate: {
+        type: [String, Boolean],
+        default: 'always' // 'always', 'first_submit', 'only_submit', 'never'
     }
 })
 
@@ -37,9 +41,31 @@ const clearErrors = () => {
         v.clear();
     })
 }
+
 defineExpose({
     clearErrors,
     formEl: formEl.value
+})
+
+/** Indicate whether validate function should run */
+const isActive = ref(true)
+provide('isActive', isActive)
+
+const setActive = () => {
+    if (!props.activate || props.activate == 'first_submit' || props.activate == 'only_submit' || props.activate == 'never') {
+        isActive.value = false
+        clearErrors()
+    }
+    else {
+        isActive.value = true
+    }
+}
+onBeforeMount(() => {
+    setActive()
+})
+
+watch(() => props.activate, () => {
+    setActive()
 })
 
 /**
@@ -47,6 +73,15 @@ defineExpose({
  * @param {*} e - The event data
  */
 const dogSubmit = (e) => {
+    if (!isActive.value) {
+        if (props.activate == 'never' || !props.activate) {
+            e.isValid = true
+            emit('submit', e)
+            return
+        }
+        isActive.value = true
+    }
+
     let errorCount = 0
     let errorInput = null
     errorInstances.forEach(v => {
@@ -69,6 +104,10 @@ const dogSubmit = (e) => {
         });
     }
     emit('submit', e)
+
+    if (props.activate == 'only_submit') {
+        isActive.value = false
+    }
 }
 
 const emit = defineEmits(['submit'])
