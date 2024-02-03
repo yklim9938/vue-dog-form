@@ -98,7 +98,26 @@ The `isValid` property in the submit event will tell us whether the form is vali
 
 ## Components
 
-### DError
+### `<DForm>`
+
+#### Props
+
+| Name | Info | Type |
+| -- | -- | -- |
+| novalidate | Remove browser's default validation message | Boolean |
+| focus-error | Auto scroll to invalid input upon form submission. See [Example](#Scroll-to-invalid-input) | Boolean |
+| focus-offset | The offset position for auto scroll. See [Example](#Offsetting-scroll). | Number |
+| activate | Specify when should the validation happen. See [Example](#When-to-validate) | String / Boolean
+
+#### Methods
+
+##### clearErrors()
+
+Removes all error messages by calling the clear() method on every `<DError>`.
+
+---
+
+### `<DError>`
 
 #### Props
 
@@ -116,25 +135,6 @@ Validates the input. If the value is invalid, an error message will be shown. If
 
 ##### clear()
 Clears the error message. Also removes .invalid and .valid class from matched target.
-
----
-
-### DForm
-
-#### Props
-
-| Name | Info | Type |
-| -- | -- | -- |
-| novalidate | Remove browser's default validation message | Boolean |
-| focus-error | Auto scroll to invalid input upon form submission. See [Example](#Scroll-to-invalid-input) | Boolean |
-| focus-offset | The offset position for auto scroll. See [Example](#Offsetting-scroll). | Number |
-| activate | Specify when should the validation happen. See [Example](#When-to-validate) | String / Boolean
-
-#### Methods
-
-##### clearErrors()
-
-Removes all error messages by calling the clear() method on every <DError>.
 
 ---
 
