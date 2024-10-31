@@ -5,7 +5,7 @@ const rules = {
                 type: 'required'
             }
         }
-        else if (Array.isArray(val) || typeof val == 'string') {
+        else if (Array.isArray(val) || typeof val == 'string' || val instanceof FileList) {
             if (val.length < 1) {
                 return {
                     type: 'required'
