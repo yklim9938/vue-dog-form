@@ -133,16 +133,12 @@ watch(() => props.modelValue, () => {
     validate()
 })
 
-watch(() => attrs.equalto, (newVal) => {
-    if (newVal && props.modelValue) {
-        validate()
-    }
-})
-
-watch(() => attrs.notequalto, (newVal) => {
-    if (newVal && props.modelValue) {
-        validate()
-    } 
+onMounted(() => {
+    $dForm.autoValidate.forEach(rule => {
+        watch(() => attrs[rule], () => {
+            validate()
+        })
+    })
 })
 
 defineExpose({

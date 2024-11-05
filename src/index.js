@@ -23,7 +23,8 @@ const dogForm = {
             message(error) {
                 return error.value?.n ? this.validationMessages[error.type].replace(/{n}/g, error.value.n) : this.validationMessages[error.type] || error.type
             },
-            customRules: {}
+            customRules: {},
+            autoValidate: ['equalto', 'notequalto']
         }
 
         if (typeof options == 'object') {
@@ -48,6 +49,14 @@ const dogForm = {
                         $dForm.validationMessages[r] = options.customRules[r].message
                     }
                 }
+            }
+
+            if (Array.isArray(options.autoValidate)) {
+                options.autoValidate.forEach(rule => {
+                    if (typeof rule == 'string') {
+                        $dForm.autoValidate.push(rule)
+                    }
+                })
             }
         }
         app.provide('$dForm', $dForm)

@@ -168,7 +168,7 @@ app.use(dogForm, {
 
 Overwrites default validation messages globally.
 
-E.g. Overwriting **only** the required validation message.
+E.g. Overwriting  message for `required`.
 
 ```
 app.use(dogForm, {
@@ -259,6 +259,20 @@ app.use(dogForm, {
 ```
 
 **Note** *validation attributes must be small caps
+
+### autoValidate
+
+Automatically revalidate when the specified attributes change. Useful when the validation involves v-model and other states.
+
+The default value is `['equalto', 'notequalto']`. This is how the built-in `equalto` validation works. See [example](#Password-And-Confirm-Password)
+
+You can add more with array of strings.
+
+```
+app.use(dogForm, {
+    autoValidate: ['newrule', 'secondrule']
+})
+```
 
 ## Examples
 
