@@ -16,7 +16,7 @@ Simplest yet flexible form validation plugin for Vue 3.
 
 ### 1. Installation
 
-```
+```bash
 $ npm i vue-dog-form
 ```
 
@@ -26,7 +26,7 @@ $ npm i vue-dog-form
 
 In `/src/main.js`
 
-```
+```js
 import { createApp } from 'vue'
 import App from './App.vue'
 import dogForm from 'vue-dog-form'
@@ -40,7 +40,7 @@ app.mount('#app')
 
 Create a `dogForm.js` file under `plugins` folder with the following content:
 
-```
+```js
 import dogForm from 'vue-dog-form'
 
 export default defineNuxtPlugin(nuxtApp => {
@@ -56,20 +56,22 @@ export default defineNuxtPlugin(nuxtApp => {
 1. Build your form as usual, but wrap it in a `<DForm>` component.
 2. Add `<DError>` with validation attributes.
 
-```
-<DForm @submit="submitHandler">
-    <div>
-        <label>Name</label>
-        <input type="text" v-model="name">
-        <DError v-model="name" required minlength="3"/>
-    </div>
-    <div>
-        <label>Password</label>
-        <input type="password" v-model="password">
-        <DError v-model="password" required/>
-    </div>
-    <button type="submit">Submit</button>
-</DForm>
+```vue
+<template>
+    <DForm @submit="submitHandler">
+        <div>
+            <label>Name</label>
+            <input type="text" v-model="name">
+            <DError v-model="name" required minlength="3"/>
+        </div>
+        <div>
+            <label>Password</label>
+            <input type="password" v-model="password">
+            <DError v-model="password" required/>
+        </div>
+        <button type="submit">Submit</button>
+    </DForm>
+</template>
 
 <script setup>
 const submitHandler = (e) => {
@@ -158,7 +160,7 @@ Vue Dog Form provides some built-in validations which are similar to native html
 
 You can modify DogForm's behavior with `app.use()`.
 
-```
+```js
 app.use(dogForm, {
     ... parameters
 })
@@ -170,7 +172,7 @@ Overwrites default validation messages globally.
 
 E.g. Overwriting  message for `required`.
 
-```
+```js
 app.use(dogForm, {
     defaultMessages: {
         required: `Don't be lazy.`
@@ -193,7 +195,7 @@ E.g. Translating messages with vue-i18n:
 
 In main.js
 
-```
+```js
 const messages = {
     cn: {
         error_required: "这是必填栏。",
@@ -229,12 +231,12 @@ Adds custom validation rules.
 
 E.g. Add a custom attribute that checks whether input value is a multiple of 3.
 
-```
+```vue
 <input type="number" v-model="answer">
 <DError v-model="answer" multiple="3" />
 ```
 
-```
+```js
 app.use(dogForm, {
     customRules: {
         multipleof: {
@@ -262,13 +264,13 @@ app.use(dogForm, {
 
 ### autoValidate
 
-Automatically revalidate when the specified attributes change. Useful when the validation involves v-model and other states.
+Automatically revalidate when the value specified attribute changes. Useful when the validation involves v-model and other states.
 
-The default value is `['equalto', 'notequalto']`. This is how the built-in `equalto` validation works. See [example](#Password-And-Confirm-Password)
+The default value is `['equalto', 'notequalto']`, which are built-in validations. See [example](#Password-And-Confirm-Password)
 
 You can add more with array of strings.
 
-```
+```js
 app.use(dogForm, {
     autoValidate: ['newrule', 'secondrule']
 })
@@ -280,8 +282,12 @@ app.use(dogForm, {
 
 Use `messages` prop to show custom validation messages.
 
-```
-<DError v-model="name" required minlength="2" :messages="customMessage" />
+```vue
+<template>
+    ...
+    <DError v-model="name" required minlength="2" :messages="customMessage" />
+</template>
+
 
 <script setup>
 const customMessage = {
@@ -294,7 +300,7 @@ const customMessage = {
 ### Adding class to inputs
 
 Use the `target` prop on `<DError>` as css selector to select elements. Selected elements will have `.invalid` class added when the input is invalid, `.valid` when valid.
-```
+```vue
 <input type="email" id="emailInput" v-model="name"/>
 <DError v-model="name" required validemail target="#emailInput" />
 ```
@@ -304,7 +310,7 @@ Use the `target` prop on `<DError>` as css selector to select elements. Selected
 
 Simply add a ```novalidate``` attribute on ```<DForm>```
 
-```
+```vue
 <DForm @submit="submitHandler" novalidate>
 <!-- Your inputs -->
 </DForm>
@@ -314,7 +320,7 @@ Simply add a ```novalidate``` attribute on ```<DForm>```
 
 By adding `focus-error` prop on `<DForm>`, invalid inputs can be automatically scrolled into view upon form submission. This is useful when you have a long form.
 
-```
+```vue
 <DForm @submit="handleSubmit" focus-error>
     <input type="text" v-model="name" id="nameInput" />
     <DError v-model="name" required target="#nameInput" />
@@ -327,7 +333,7 @@ By adding `focus-error` prop on `<DForm>`, invalid inputs can be automatically s
 
 We can offset the scroll position by using `focus-offset`. This is useful if you have a floating header that covers the input after scrolling.
 
-```
+```vue
 <DForm @submit="handleSubmit" focus-error :focus-offset="90">
 ```
 
@@ -344,18 +350,20 @@ The `activate` props controls the validation behaviour. The value could be
  - true - Same as "always"
  - false - Same as "never"
  
-```
+```vue
 <DForm activate="first_submit">
 ```
 
 ### Clearing Form Errors
 
 Calling the `clearErrors()` method on `<DForm>` to clear all errors.
-```
-<DForm ref="formRef">
-    <!-- ...your inputs -->
-    <button type="reset" @click="clearForm">Reset</button>
-</DForm>
+```vue
+<template>
+    <DForm ref="formRef">
+        <!-- ...your inputs -->
+        <button type="reset" @click="clearForm">Reset</button>
+    </DForm>
+</template>
 
 <script setup>
 const formRef = ref(null)
@@ -367,9 +375,11 @@ const clearForm = (e) => {
 
 ### File Input Validations
 
-```
-<input type="file" multiple @change="fileChange">
-<DError v-model="file"  maxsize="2097152" maxfile="2" required />
+```vue
+<template>
+    <input type="file" multiple @change="fileChange">
+    <DError v-model="file"  maxsize="2097152" maxfile="2" required />
+</template>
 
 <script setup>
 const file = ref('')
@@ -382,7 +392,7 @@ const fileChange = (e) => {
 
 ### Password And Confirm Password
 
-```
+```vue
 <div>
     <label>Password</label>
     <input type="password" v-model="password">
