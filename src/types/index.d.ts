@@ -20,7 +20,7 @@ interface RuleEntry {
 
 type DogFormActivate = 'always' | 'first_submit' | 'only_submit' | 'never'
 
-export default interface DogFormOptions {
+interface DogFormOptions {
     defaultMessages?: ErrorMessages,
     message?: (error: ErrorObject) => string,
     customRules?: {
