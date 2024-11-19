@@ -1,113 +1,79 @@
-
 <template>
-	<div>
-		<DForm @submit="submitHandler" novalidate ref="formRef" focus-error :focus-offset="40" activate="always">
-			<div>
-				<div>Name</div>
-				<input type="text" name="name" v-model="name"/>
-				<DError v-model.trim="name" :messages="customMessage" minlength="2" multipleof="3" target='[name="name"]' />
-			</div>
-			<div v-if="!noEmail">
-				<div>Email</div>
-				<input type="email" v-model="email" />
-				<DError v-model="email" required validemail />
-			</div>
-			<div>
-				<div>Password</div>
-				<input type="password" v-model="password" required maxlength="32" />
-				<DError v-model="password" required maxlength="32" />
-			</div>
-			<div>
-				<div>Confirm Password</div>
-				<input type="password" v-model="confirmPassword" />
-				<DError v-model="confirmPassword" :equalto="password" maxlength="32" />
-			</div>
-			<div>
-				<div>Quantity</div>
-				<input type="number" v-model="qty">
-				<DError v-model="qty" required max="3" ref="numErrRef" />
-				<div>
-					<button type="button" @click="numErrRef.validate()">Validate Number</button>
-				</div>
-			</div>
-			<div>
-				<div>File</div>
-				<input type="file" multiple accept="image/*" @change="fileChange" />
-				<DError v-model="file" accept="image/*" maxsize="2097152" maxfile="2" required />
-			</div>
-			<div>
-				<input type="checkbox" value="sd" v-model="checkboxValue">
-				<DError v-model="checkboxValue" required />
-			</div>
-			<div>
-				<div>Select</div>
-					<select v-model="selectVal">
-					<option value="">please select</option>
-					<option value="1">1</option>
-					<option value="2">2</option>
-					<option value="3">3</option>
-					<option value="4">4</option>
-					<option value="5">5</option>
-				</select>
-				<DError v-model="selectVal" required />
-			</div>
-			<button type="submit">Submit</button>
-			<div>
-				<button type="reset" @click="clearForm">Reset</button>
-			</div>
-		</DForm>
-			<div>
-				<button type="button" @click="noEmail = !noEmail">No Email</button>
-			</div>
-	</div>
+  <div>
+    <DForm @submit="handleSubmit"  focus-error :focus-offset="60" ref="dForm">
+      <div>
+        <div>Email</div>
+        <input type="email" v-model="email" id="emailInput">
+        <DError v-model="email" minlength="2" maxlength="16" validemail target="#emailInput" />
+      </div>
+      <div>
+        <div>Password</div>
+        <input type="password" v-model="password">
+        <DError v-model="password" required />
+      </div>
+      <div>
+        <div>Confirm Password</div>
+        <input type="password" v-model="cpassword">
+        <DError v-model="cpassword" :equalto="password" ref="cPasswordError" />
+      </div>
+      <div>
+        <div>Age</div>
+        <input type="number" v-model="age">
+        <DError v-model="age" required min="18"/>
+      </div>
+      <div>
+        <div>Photo</div>
+        <input type="file" @change="handlePhoto" multiple>
+        <DError v-model="photo" required accept="image/*" maxsize="2097152" />
+      </div>
+      <div>
+        <button id="submitBtn">Submit</button>
+        <button type="reset" @click="resetForm">Reset</button>
+      </div>
+    </DForm>
+
+    <div style="margin-top: 20px;">
+      <button @click="testCPass">Test</button>
+      <button @click="toggleNativeValidate">toggleNativeValidate</button>
+    </div>
+  </div>
 </template>
 
-<script setup>
-import { ref } from 'vue'
-const customMessage = {
-	required: 'Name is required',
-}
-const name = ref('')
-const password = ref('')
-const confirmPassword = ref('')
+<script setup lang="ts">
+import { ref } from 'vue';
+import type { DogSubmitEvent } from './types/DogSubmitEvent';
+
 const email = ref('')
+const password = ref('')
+const cpassword = ref('')
 
-const qty = ref()
-
-const file = ref('')
-const fileChange = (e) => {
-	console.log(e)
-	file.value = e.target.files
+const age = ref()
+const photo = ref()
+const  handlePhoto = (e:Event) => {
+  if (e.target && e.target instanceof HTMLInputElement) {
+    console.log(e?.target?.files)
+    photo.value = e.target.files
+  }
+}
+const handleSubmit = (e: DogSubmitEvent) => {
+  console.log(e)
 }
 
-const submitHandler = (e) => {
-	console.log(e.isValid)
-	return
+
+const dForm = ref()
+const  resetForm = () => {
+  dForm.value.clearErrors()
 }
 
-const formRef = ref(null)
-const clearForm = (e) => {
-	formRef.value.clearErrors()
+const cPasswordError = ref()
+const testCPass = () => {
+  console.log(dForm.value.hasError())
+  // let s = cPasswordError.value.validate()
 }
 
-const noEmail = ref(false)
-
-const selectVal = ref()
-
-const checkboxValue = ref([])
-
-const numErrRef = ref()
+const nativeValidate = ref(false)
+const toggleNativeValidate = () => {
+  nativeValidate.value = !nativeValidate.value
+  console.log(nativeValidate.value)
+}
 </script>
-<style>
-@import "./assets/base.css";
-input {
-	outline: none;
-	border: 1px solid grey;
-}
-input.invalid {
-	border: 1px solid red;
-}
-input.valid {
-	border: 1px solid green;
-}
-</style>

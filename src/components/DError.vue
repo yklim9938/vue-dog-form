@@ -1,52 +1,33 @@
 <template>
-    <div class="_df_ErrMsg" :class="$props.class" v-if="errorMsg">{{errorMsg}}</div>
+    <div v-if="errorMsg" class="_df_ErrMsg" :class="$props.class">{{errorMsg}}</div>
 </template>
 
-<script setup>
-import validation from '@/assets/validation'
-import {ref, inject, onMounted, useAttrs, onBeforeUnmount, watch } from 'vue'
+<script setup lang="ts">
+import { inject, onMounted, ref, useAttrs, onBeforeUnmount, watch } from 'vue';
+import { errorInstancesKey, isActiveKey, dogFormKey } from '@/types/provides'
+import type { Validity } from '@/types/Validity';
+import type { ErrorMessages } from '@/types/ErrorMessages';
+import type { ErrorObject } from '@/types/ErrorObject';
 
-const props = defineProps({
-    modelValue: {
-        type: [String, Number, Object, Array]
-    },
-    messages: {
-        type: Object
-    },
-    target: {
-        type: String
-    }
-})
+interface Props {
+    modelValue: any,
+    messages?: ErrorMessages,
+    target?: string
+}
 
+const props = defineProps<Props>()
 
 /** Unique ID of this instance */
 const instanceId = Math.random().toString()
-
-/** Provided by DForm to hold all error instances. 
- * @type {Array}
-*/
-const errorInstances = inject('errorInstances')
-
+const errorInstances = inject(errorInstancesKey)
 onMounted(() => {
-    errorInstances.push({
+    errorInstances?.push({
         id: instanceId,
-        validate,
-        clear
+        validate: validate,
+        clear: clear,
+        errorMessage: errorMsg
     })
 })
-
-onBeforeUnmount(() => {
-    clear() // make sure added classes are removed
-    const targetIndex = errorInstances.findIndex(d => d.id == instanceId)
-    errorInstances.splice(targetIndex, 1)
-})
-
-
-/** plugin settings */
-const $dForm = inject('$dForm')
-
-/** The error message that will be rendered */
-const errorMsg = ref('')
 
 /** Attributes passed to this components */
 const attrs = useAttrs()
@@ -70,57 +51,79 @@ const isRequired = () => {
     return true
 }
 
-/** Provided by DForm, indicate whether validate function should run */
-const isActive = inject('isActive')
 
-const validate = () => {
-    if (!isActive.value) {
+/** The error message that will be rendered */
+const errorMsg = ref('')
+const $dForm = inject(dogFormKey)
+const isActive = inject(isActiveKey)
+
+/**
+ * Validates the input. If the value is invalid, an error message will be shown. If target prop is provided, matched elements will have .invalid or .valid class.
+ */
+const validate = (force?: boolean) : Validity => {
+    if (!force && (!isActive || !isActive.value)) {
         return
     }
     errorMsg.value = ''
-    let inputEls = []
+    let inputEls = [] as unknown as NodeListOf<Element>
     if (props.target) {
         inputEls = document.querySelectorAll(props.target)
         inputEls.forEach(ie => ie.classList.remove('invalid', 'valid'))
     }
 
     if (!hasValue() && !isRequired()) {
-        return {}
+        return
     }
 
-    let error = {}
+    let error = {} as Validity
+
     for (let rule in attrs) {
         let ruleVal = attrs[rule]
         
-        if (validation[rule]) {
-            error = validation[rule](props.modelValue, ruleVal)
-        }
-        else if (typeof $dForm.customRules == 'object' && typeof $dForm.customRules[rule] == 'function') {
-            error = $dForm.customRules[rule](props.modelValue, ruleVal)
-        }
-
-        if (error && error.type) {
-            if (props.messages && props.messages[error.type]) {
-                errorMsg.value = props.messages[error.type]
-                break
-            }
-            else {
-                errorMsg.value = $dForm.message(error)
-                break
+        if ($dForm?.validationRules[rule]) {
+            error = $dForm.validationRules[rule].rule(props.modelValue, ruleVal) as ErrorObject
+            if (error && error.type) {
+                if (props.messages && typeof props.messages[error.type] == 'string') {
+                    errorMsg.value = props.messages[error.type]
+                }
+                else {
+                    errorMsg.value = $dForm.message(error)
+                }
+                break;
             }
         }
     }
-
     if(error && error.type) {
         inputEls.forEach(ie => ie.classList.add('invalid'))
-        error.els = inputEls
+        error.errorElements = inputEls
     }
-    else if (!error.type && props.target) {
+    else {
         inputEls.forEach(ie => ie.classList.add('valid'))
     }
     return error
 }
+watch(() => props.modelValue, () => {
+    validate()
+})
+onMounted(() => {
+    if (!$dForm?.validationRules) {
+        return
+    }
 
+    // watch auto validation
+    Object.keys(attrs).forEach(r => {
+        if ($dForm.validationRules[r]?.auto) {
+            watch(() => attrs[r], () => {
+                validate()
+            })
+        }
+    })
+
+})
+
+/**
+ * clear errorMsg and remove all valid/invalid class on the target elements
+ */
 const clear = () => {
     errorMsg.value = ''
     if (props.target) {
@@ -128,21 +131,12 @@ const clear = () => {
         inputEls.forEach(ie => ie.classList.remove('invalid', 'valid'))
     }
 }
-
-watch(() => props.modelValue, () => {
-    validate()
-})
-
-watch(() => attrs.equalto, (newVal) => {
-    if (newVal && props.modelValue) {
-        validate()
+onBeforeUnmount(() => {
+    clear() // make sure added classes are removed
+    const targetIndex = errorInstances?.findIndex(d => d.id == instanceId)
+    if (typeof targetIndex == 'number' && targetIndex >= 0) {
+        errorInstances?.splice(targetIndex, 1)
     }
-})
-
-watch(() => attrs.notequalto, (newVal) => {
-    if (newVal && props.modelValue) {
-        validate()
-    } 
 })
 
 defineExpose({

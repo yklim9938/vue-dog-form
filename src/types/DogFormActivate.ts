@@ -1,0 +1,1 @@
+export type DogFormActivate = 'always' | 'first_submit' | 'only_submit' | 'never'
