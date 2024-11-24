@@ -29,3 +29,8 @@ interface DogFormOptions {
     activate?: DogFormActivate,
     nativeValidate?: boolean
 }
+
+declare const _default: {
+    install: (app: any, options: DogFormOptions) => void;
+};
+export default _default;
