@@ -1,6 +1,6 @@
 <template>
   <div>
-    <DForm @submit="handleSubmit"  focus-error :focus-offset="60" ref="dForm">
+    <DForm @submit="handleSubmit" focus-error :focus-offset="60" ref="dForm">
       <div>
         <div>Email</div>
         <input type="email" v-model="email" id="emailInput">
@@ -27,6 +27,10 @@
         <DError v-model="photo" required accept="image/*" maxsize="2097152" />
       </div>
       <div>
+        <div>Date</div>
+        <input type="text" v-model="date">
+      </div>
+      <div>
         <button id="submitBtn">Submit</button>
         <button type="reset" @click="resetForm">Reset</button>
       </div>
@@ -41,8 +45,6 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import type { DogSubmitEvent } from './types/DogSubmitEvent';
-
 const email = ref('')
 const password = ref('')
 const cpassword = ref('')
@@ -55,6 +57,9 @@ const  handlePhoto = (e:Event) => {
     photo.value = e.target.files
   }
 }
+
+const date = ref()
+
 const handleSubmit = (e: DogSubmitEvent) => {
   console.log(e)
 }

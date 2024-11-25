@@ -8,7 +8,6 @@
 import { ref, provide, onBeforeMount, watch, inject} from 'vue'
 import { errorInstancesKey, isActiveKey, dogFormKey } from '@/types/provides'
 import type { DErrorInstanceLink } from '@/types/DErrorInstanceLink'
-import type { DogSubmitEvent } from '@/types/DogSubmitEvent';
 import type { DogFormActivate } from '@/types/DogFormActivate';
 
 defineOptions({

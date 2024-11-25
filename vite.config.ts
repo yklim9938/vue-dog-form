@@ -3,34 +3,22 @@ import { fileURLToPath, URL } from 'node:url'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueDevTools from 'vite-plugin-vue-devtools'
-
-import typescript2 from 'rollup-plugin-typescript2'
+import dts from 'vite-plugin-dts'
 
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [
     vue(),
     vueDevTools(),
-    typescript2({
-      check: false,
-      include: ["src/components/*.vue", "src/index.ts"],
-      tsconfigOverride: {
-        compilerOptions: {
-          sourceMap: true,
-          declaration: true,
-          declarationMap: true
-        }
-      },
-      exclude: [
-        'vite.config.ts'
-      ]
+    dts({
+      tsconfigPath: './tsconfig.build.json',
     })
   ],
   build: {
     cssCodeSplit: false,
     lib: {
-      entry: './src/index.ts',
-      formats: ['es', 'cjs'],
+      entry: './index.ts',
+      formats: ['es'],
       name: 'VueDogForm',
       fileName: (format) => (format == 'es' ? 'index.js' : 'index.cjs'),
     },

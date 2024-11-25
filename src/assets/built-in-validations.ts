@@ -22,7 +22,6 @@ const validations: {[key: string]: RuleEntry} = {
                     }
                 }
             }
-            return
         },
         message: "This field is required.",
     },
