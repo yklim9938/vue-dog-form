@@ -122,6 +122,7 @@ const dogSubmit = (formSubmitEvent: DogSubmitEvent) => {
     }
 }
 
+/** Returns true if there's error in the form. */
 const hasError = () => {
     let errorFound = false
     for (let i = 0; i < errorInstances.length; i++) {

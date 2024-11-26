@@ -65,15 +65,16 @@ const handleSubmit = (e: DogSubmitEvent) => {
 }
 
 
-const dForm = ref()
+const dForm = ref<DForm>()
 const  resetForm = () => {
-  dForm.value.clearErrors()
+  dForm.value?.clearErrors()
 }
 
-const cPasswordError = ref()
+const cPasswordError = ref<DError>()
 const testCPass = () => {
-  console.log(dForm.value.hasError())
-  // let s = cPasswordError.value.validate()
+  console.log(dForm.value?.hasError())
+  console.log(cPasswordError.value?.validate())
+  console.log(cPasswordError.value?.errorMsg)
 }
 
 const nativeValidate = ref(false)

@@ -21,6 +21,8 @@ declare global {
     interface DogSubmitEvent extends Event {
         isValid?: boolean
     }
+    type DForm = InstanceType<typeof DForm>
+    type DError = InstanceType<typeof DError>
 }
 
 
