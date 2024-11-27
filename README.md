@@ -71,8 +71,8 @@ export default defineNuxtPlugin(nuxtApp => {
     </DForm>
 </template>
 
-<script setup>
-const submitHandler = (e) => {
+<script setup lang="ts">
+const submitHandler = (e: DogSubmitEvent) => {
     // You don't have to call e.preventDefault(). It's prevented automatically.
 
     if (!e.isValid) return // stop if form is not valid
@@ -88,11 +88,11 @@ const submitHandler = (e) => {
 
 ### How It Works
 
-When the `v-model` in `<DError>` changes, the value will be validated with it's attributes. If the value is invalid, `<DError>` will render the corresponding validation message.
+When the `v-model` in `<DError>` changes, the value will be validated with it's attributes. If the value is invalid, `<DError>` will render the corresponding error message.
 
 During form submission, `<DForm>` will pick up the event and trigger all nested `<DError>` to run validation again.
 
-The `isValid` property in the submit event will tell us whether the form is valid.
+The `isValid` property in the submit event indicates whether the form is valid.
 
 ---
 
@@ -104,10 +104,10 @@ The `isValid` property in the submit event will tell us whether the form is vali
 
 | Name | Info | Type | Default |
 | -- | -- | -- | -- |
-| native-validate | Enable browser's native form validation. | Boolean | false |
-| focus-error | Auto scroll to invalid input upon form submission. See [Example](#Scroll-to-invalid-input) | Boolean | false |
-| focus-offset | The offset position for auto scroll. See [Example](#Offsetting-scroll). | Number | 0 |
-| activate | Specify when should the validation happen. See [Example](#When-to-validate) | String | 'always'
+| native-validate | Enable browser's native form validation. | boolean | false |
+| focus-error | Auto scroll to invalid input upon form submission. See [Example](#Scroll-to-invalid-input) | boolean | false |
+| focus-offset | The offset position for auto scroll. See [Example](#Offsetting-scroll). | number | 0 |
+| activate | Specify when should the validation happen. See [Example](#When-to-validate) | string | 'always'
 
 #### Methods
 
@@ -127,7 +127,7 @@ Returns `true` if there's error in the form.
 
 | Name | Info | Type |
 | -- | -- | -- |
-| v-model | *Required. The value of your input. | string, number, object or array | 
+| v-model | *Required. The value of your input. | any | 
 | messages | Custom validation messages. See [Example](#Custom-validation-message). | object |
 | target | The css selector to select associated html elements. See [Example](#Adding-class-to-inputs). | string |
 
@@ -164,8 +164,22 @@ You can modify DogForm's behavior with `app.use()`.
 
 ```js
 app.use(dogForm, {
-    ... parameters
+    ... options
 })
+```
+
+The options has the following interface
+
+```ts
+interface DogFormOptions {
+    defaultMessages?: ErrorMessages,
+    message?: (error: ErrorObject) => string,
+    customRules?: {
+        [key: string]: RuleEntry
+    },
+    activate?: 'always' | 'first_submit' | 'only_submit' | 'never',
+    nativeValidate?: boolean
+}
 ```
 
 ### defaultMessages
@@ -229,13 +243,23 @@ app.use(dogForm, {
 
 ### customRules
 
-Adds custom validation rules.
+Add custom validation rules.
+
+Entries for `customRules` must satisty this interface
+
+```ts
+interface RuleEntry {
+    rule: (val: any, validateValue?: any) => ValidationResponse,
+    message: string,
+    auto?: boolean
+}
+```
 
 E.g. Add a custom attribute that checks whether input value is a multiple of 3.
 
 ```vue
 <input type="number" v-model="answer">
-<DError v-model="answer" multiple="3" />
+<DError v-model="answer" multipleof="3" />
 ```
 
 ```js
@@ -254,29 +278,22 @@ app.use(dogForm, {
                         }
                     }
                 }
-                return {}
             },
-            message: 'Value must be multiple of {n}'
+            message: 'Value must be multiple of {n}',
         }
     }
 })
 ```
 
-**Note** *validation attributes must be small caps
+**Note** the `auto` property in `RuleEntry`. When set to true, `DError` will automatically run validation when the value specified in attribute changes. This is useful when the validation involves other dynamic states. The builit-in validations "equalto" and "notequalto" were set to `auto:true`. See [example](#Password-And-Confirm-Password)
 
-### autoValidate
+### activate
 
-Automatically revalidate when the value specified attribute changes. Useful when the validation involves v-model and other states.
+Globally set the default value of `activate` prop for `<DForm>`.
 
-The default value is `['equalto', 'notequalto']`, which are built-in validations. See [example](#Password-And-Confirm-Password)
+### nativeValidate
 
-You can add more with array of strings.
-
-```js
-app.use(dogForm, {
-    autoValidate: ['newrule', 'secondrule']
-})
-```
+Globally set the default value of `native-validate` prop for `<DForm>`.
 
 ## Examples
 
@@ -308,12 +325,12 @@ Use the `target` prop on `<DError>` as css selector to select elements. Selected
 ```
 
 
-### Remove browser's default validation
+### Enabling browser's default validation
 
-Simply add a ```novalidate``` attribute on ```<DForm>```
+Simply add a ```native-validate``` attribute on ```<DForm>```
 
 ```vue
-<DForm @submit="submitHandler" novalidate>
+<DForm @submit="submitHandler" native-validate>
 <!-- Your inputs -->
 </DForm>
 ```
@@ -349,8 +366,6 @@ The `activate` props controls the validation behaviour. The value could be
  - "first_submit" - Only start to validate on the first form submission, and then behave like "always".
  - "only_submit" - Only validate during form submissions.
  - "never" - Disable validation. `e.isValid` from the submit event will always be `true`
- - true - Same as "always"
- - false - Same as "never"
  
 ```vue
 <DForm activate="first_submit">
