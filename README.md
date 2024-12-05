@@ -168,7 +168,7 @@ app.use(dogForm, {
 })
 ```
 
-The options has the following interface
+The `options` having the following interface
 
 ```ts
 interface DogFormOptions {
@@ -198,7 +198,7 @@ app.use(dogForm, {
 
 ### message(error)
 
-The function to generate validation message. The `error` object has the following parameters:
+The function to generate validation message. The `error` object has the following properties:
 
 | Parameters | Info |Type | Examples
 | -- | -- | -- | -- |
