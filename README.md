@@ -168,7 +168,7 @@ app.use(dogForm, {
 })
 ```
 
-The `options` having the following interface
+`options` having the following interface
 
 ```ts
 interface DogFormOptions {
